@@ -11,7 +11,8 @@ def write(lines, file_name):
 
 seed = 1
 
-data_dir = "DividedData"
+location = "/scratch/Teaching/ew01000/retina_data"
+data_dir = "retina_data"
 labels_name = "labels.txt"
 train_name = "train.txt"
 val_name = "val.txt"
@@ -27,7 +28,8 @@ train_content = []
 
 dir_names = [f.name for f in os.scandir(data_dir) if f.is_dir()]
 
-for class_name in dir_names:
+for i in range(len(dir_names)):
+    class_name = dir_names[i]
     class_dir = data_dir + '/' + class_name
     file_names = [f for f in listdir(class_dir) if isfile(join(class_dir, f))]
 
@@ -36,12 +38,12 @@ for class_name in dir_names:
 
     print("For class " + class_name + ": total_train is " + str(total_train) + " and total_val is " + str(total_val) + " and total test is " + str(len(file_names) - total_val))
 
-    for i in range(len(file_names)):
-        line = [file_names[i] + ' ' + class_name]
+    for j in range(len(file_names)):
+        line = [location + '/' + class_name + '/' + file_names[j] + ' ' + str(i)]
 
-        if i < total_train:
+        if j < total_train:
             train_content += line
-        elif i < total_val:
+        elif j < total_val:
             val_content += line
         else:
             test_content += line
