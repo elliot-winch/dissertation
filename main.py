@@ -13,23 +13,24 @@ import torchvision
 import numpy as np
 
 from alex_net import AlexNet
+from epoch_data import EpochData, EpochRecorder
 
 """
 Wrapped class for training & testing a Neural Network
 """
 class NeuralNetwork():
 
-    data_dir = 'retina_data'
-    output_path = 'model.pth'
+    data_dir = 'retina_test'
+    output_path = 'model.pth' #caution: each new model is ~0.2GB. Creating lots of models will quickly take up memory
     torch_seed = 1
     image_size = 227
-    batch_size = 32
+    batch_size = 2
     shuffle_after_epoch = True
 
-    learning_rate = 1e-3
+    learning_rate = 1e-4
     momentum = 0.9
-    epochs = 2
-    debug_print_every = 200
+    epochs = 10
+    debug_print_every = 50
 
     classes = [ 'Failure', 'Success' ]
 
@@ -63,6 +64,9 @@ class NeuralNetwork():
         criterion = nn.CrossEntropyLoss() #Adjust this function to use different loss
         optimizer = optim.SGD(model.parameters(), lr=self.learning_rate, momentum=self.momentum)
 
+        #Debugging
+        epoch_recorder = EpochRecorder()
+
         for epoch in range(self.epochs):  # loop over the dataset multiple times
 
             print("\n\nNew Epoch: " + str(epoch))
@@ -84,9 +88,17 @@ class NeuralNetwork():
 
                 # print statistics
                 running_loss += loss.item()
-                if i % self.debug_print_every == 0:    # debug print every N mini-batches
+
+            epoch_data = EpochData(i)
+            epoch_data.loss = running_loss / i
+            epoch_data.time_to_complete = 4
+            epoch_recorder.record(epoch_data)
+
+            """
+                if i % self.debug_print_every == (self.debug_print_every - 1):    # debug print every N mini-batches
                     print(f'[{epoch}, {i}] loss: {running_loss / self.debug_print_every:.5f}')
                     running_loss = 0.0
+            """
 
         torch.save(model.state_dict(), self.output_path)
 
