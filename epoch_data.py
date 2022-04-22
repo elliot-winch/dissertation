@@ -1,34 +1,40 @@
-class EpochData(object):
-    """Output from each epoch"""
+import csv
+import matplotlib.pyplot as plt
 
-    epoch_number = 0
-    loss = 0
-    #validation loss
-    time_to_complete = 0
-
-    def __init__(self, epoch_number):
-        super(EpochData, self).__init__()
-        self.epoch_number = epoch_number
-
-    def __str__(self):
-        return ','.join([str(self.epoch_number), str(self.loss), str(self.time_to_complete)])
-
-
-class EpochRecorder(object):
+class TrainingMetadata(object):
 
     epochs = []
     file_name = ''
 
-    def __init__(self, file_name='EpochData.csv'):
-        super(EpochRecorder, self).__init__()
-        self.file_name = file_name
+    def __init__(self, file_name):
+        super(TrainingMetadata, self).__init__()
+        self.file_name = file_name + '.csv'
 
-    def record(self, epoch_data, write=True):
-        self.epochs.append(str(epoch_data))
-        if write:
-            self.write()
+    def record(self, loss, validation_loss):
+        line = ','.join([str(loss), str(validation_loss)])
+        self.epochs.append(line)
 
     def write(self):
-        f = open(self.file_name, "a")
-        f.write('\n'.join(self.epochs) + '\n')
-        f.close()
+        with open(self.file_name, "w+") as f:
+            f.write('\n'.join(self.epochs))
+            f.close()
+
+    def read(self):
+        self.epochs = []
+        with open(self.file_name) as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                self.epochs.append(row)
+
+    def plot(self):
+        losses = [float(i[0]) for i in self.epochs]
+        validation_losses = [float(i[1]) for i in self.epochs]
+        epochs = range(len(self.epochs))
+        plt.plot(epochs, losses, epochs, validation_losses)
+        plt.show()
+
+    #def plot(self):
+if __name__ == "__main__":
+    t = TrainingMetadata('EpochData/epoch_data_test')
+    t.read()
+    t.plot()

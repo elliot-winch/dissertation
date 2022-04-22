@@ -1,0 +1,18 @@
+{
+  "seed" : 1,
+  "image_size" : 227,
+  "batch_size" : 8,
+  "learning_rate" : 1e-4,
+  "momentum" : 0.9,
+  "epochs" : 10,
+  "train_prop" : 0.9,
+  "val_prop" : 0.05,
+
+
+  "data_dir" : "retina_data",
+  "sorted_data_dir" : "sorted_data",
+  "classes" : [ "Failure", "Success" ],
+  "upsample_by_class" : [1, 1],
+  "model_path" : "model.pth",
+  "epoch_data_path": "EpochData/epoch_data_"
+}
