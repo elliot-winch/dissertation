@@ -17,7 +17,7 @@ import time
 from ignite.metrics.confusion_matrix import ConfusionMatrix
 
 from alex_net import AlexNet
-from epoch_data import TrainingMetadata
+from training_metadata import TrainingMetadata
 import arrange_files
 
 """
