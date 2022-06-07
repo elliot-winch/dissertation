@@ -13,7 +13,7 @@ class AlexNet(nn.Module):
         self.conv5 = nn.Conv2d(in_channels=384, out_channels=256, kernel_size=3, stride=1, padding=1)
         self.fc1  = nn.Linear(in_features= 9216, out_features= 4096)
         self.fc2  = nn.Linear(in_features= 4096, out_features= 4096)
-        self.fc3 = nn.Linear(in_features=4096 , out_features=10)
+        self.fc3 = nn.Linear(in_features=4096 , out_features=2)
 
     def forward(self,x):
         x = F.relu(self.conv1(x))
