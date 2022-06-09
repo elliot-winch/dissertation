@@ -16,6 +16,11 @@ import time
 
 from ignite.metrics.confusion_matrix import ConfusionMatrix
 
+import json
+
+#NB only works on Windows
+import winsound
+
 from architecture_alex_net import AlexNet
 from training_metadata import TrainingMetadata
 import arrange_files
@@ -29,7 +34,10 @@ Ensure model name is the same as existing if you don't want to create a new file
 class NeuralNetwork(object):
 
     config = {}
-    debug_print_every = 50
+    epoch_finished_sound_data = [440, 400]
+    training_finished_sound_data = [880, 3000]
+
+    output = {}
 
     def __init__(self, config):
         super(NeuralNetwork, self).__init__()
@@ -64,24 +72,44 @@ class NeuralNetwork(object):
         #Recording
         training_metadata = TrainingMetadata(self.config.epoch_data_path + time.strftime("%Y%m%d-%H%M%S"))
 
-        for epoch_num in range(self.config.epochs):  # loop over the dataset N times
-            print("\n\nNew Epoch: " + str(epoch_num))
-            epoch_data = self.epoch(train_dataloader, model, criterion, optimizer)
-            training_metadata.record(epoch_data[0], epoch_data[1])
+        total_time = 0
 
-        training_metadata.write()
+        #Run Epochs
+        for epoch_num in range(self.config.epochs):  # loop over the dataset N times
+
+            print("\nEpoch " + str(epoch_num)) #Logging
+
+            epoch_data = self.epoch(train_dataloader, model, criterion, optimizer)
+            total_time = total_time + epoch_data[2]
+            winsound.Beep(self.epoch_finished_sound_data[0], self.epoch_finished_sound_data[1])
+            #training_metadata.record(epoch_data[0], epoch_data[1])
+
+        print("\nTotal time (minutes): " + str(total_time / 60))
+
+        #training_metadata.write()
         torch.save(model.state_dict(), self.config.model_path)
 
+        winsound.Beep(self.training_finished_sound_data[0], self.training_finished_sound_data[1])
+
     def epoch(self, train_dataloader, model, criterion, optimizer):
+
+        start_time = time.time()
+        num_batches = len(train_dataloader)
+
         loss_sum = 0.0
         val_loss_sum = 0.0
         for i, data in enumerate(train_dataloader, 0):
             loss_sum += self.epoch_train(data, model, criterion, optimizer).item()
             val_loss_sum += self.epoch_val(data, model, criterion).item()
+            self.log_progress_bar(i / num_batches)
 
         loss = loss_sum / len(train_dataloader)
         validation_loss = val_loss_sum / len(train_dataloader)
-        return [loss, validation_loss]
+
+        time_taken = time.time() - start_time
+        print("\nEpoch time (minutes): " + str(time_taken / 60))
+
+        return [loss, validation_loss, time_taken]
 
     def epoch_val(self, data, model, criterion):
 
@@ -156,6 +184,18 @@ class NeuralNetwork(object):
                     total_correct += matrix[i][j]
 
         return total_correct / float(total)
+
+    #logging - perhaps define in a new file
+    def log_progress_bar(self, percent=0, width=40):
+        left = int(width * percent)
+        right = width - left
+
+        tags = "#" * left
+        spaces = " " * right
+        percents = f"{(percent * 100):.0f}%"
+
+        print("\r[", tags, spaces, "]", percents, sep="", end="", flush=True)
+
 
     def imshow(self, img):
         #img = img / 2 + 0.5     # unnormalize

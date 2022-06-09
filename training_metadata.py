@@ -33,7 +33,6 @@ class TrainingMetadata(object):
         plt.plot(epochs, losses, epochs, validation_losses)
         plt.show()
 
-    #def plot(self):
 if __name__ == "__main__":
     t = TrainingMetadata('EpochData/epoch_data_test')
     t.read()
