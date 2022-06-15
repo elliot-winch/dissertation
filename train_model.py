@@ -4,13 +4,13 @@ import argparse
 import sys
 
 def train_model(config_file_name, rearrange, output_file_name):
-        config = handle_json.json_file_to_obj(config_file_name)
+    config = handle_json.json_file_to_obj(config_file_name)
 
-        neural_network = NeuralNetwork(config)
-        neural_network.train(needs_arrange=rearrange)
-        neural_network.test()
+    neural_network = NeuralNetwork(config)
+    neural_network.train(needs_arrange=rearrange)
+    neural_network.test()
 
-        handle_json.obj_to_json_file(neural_network.output, output_file_name)
+    handle_json.obj_to_json_file(neural_network.output, output_file_name)
 
 
 if __name__ == '__main__':

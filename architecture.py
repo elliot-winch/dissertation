@@ -1,28 +1,23 @@
 #From https://pytorch.org/tutorials/beginner/finetuning_torchvision_models_tutorial.html
-from __future__ import print_function
-from __future__ import division
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 import torchvision
 from torchvision import datasets, models, transforms
-import matplotlib.pyplot as plt
-import time
-import os
-import copy
+import handle_json
 
+architecture_data_path = "architecture_data.json"
+architecture_data = handle_json.json_file_to_obj(architecture_data_path)
 
-model_image_sizes = {
-    "resnet" : 224,
-    "alexnet" : 224,
-    "vgg" : 224,
-    "squeezenet" : 224,
-    "densenet" : 224,
-    "inception" : 299,
-}
+def get_architecture_data(model_name):
 
+    if hasattr(architecture_data, model_name):
+        return getattr(architecture_data, model_name)
 
+    print("Error: Invalid model name {}".format(model_name))
+
+"""
 def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_inception=False):
     since = time.time()
 
@@ -63,11 +58,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
                     #   mode we calculate the loss by summing the final output and the auxiliary output
                     #   but in testing we only consider the final output.
                     if is_inception and phase == 'train':
-                        # From https://discuss.pytorch.org/t/how-to-optimize-inception-model-with-auxiliary-classifiers/7958
-                        outputs, aux_outputs = model(inputs)
-                        loss1 = criterion(outputs, labels)
-                        loss2 = criterion(aux_outputs, labels)
-                        loss = loss1 + 0.4*loss2
+
                     else:
                         outputs = model(inputs)
                         loss = criterion(outputs, labels)
@@ -104,7 +95,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
     # load best model weights
     model.load_state_dict(best_model_wts)
     return model, val_acc_history
-
+"""
 
 #Set all layers to not update. Layers added to the network have requires_grad set to true by default.
 #These added layers wil be finetuned by the rest of the network will not be if trasnfer_learning is
@@ -165,4 +156,4 @@ def initialize_model(model_name, num_classes, use_transfer_learning, use_pretrai
         print("Invalid model name, exiting...")
         exit()
 
-    return model_ft, model_image_sizes[model_name]
+    return model_ft, get_architecture_data(model_name)

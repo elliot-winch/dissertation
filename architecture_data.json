@@ -1,0 +1,26 @@
+{
+    "resnet" : {
+      "image_size" : 224,
+      "use_aux" : false
+    },
+    "alexnet" : {
+      "image_size" : 224,
+      "use_aux" : false
+    },
+    "vgg" : {
+      "image_size" : 224,
+      "use_aux" : false
+    },
+    "squeezenet" : {
+      "image_size" : 224,
+      "use_aux" : false
+    },
+    "densenet" : {
+      "image_size" : 224,
+      "use_aux" : false
+    },
+    "inception" : {
+      "image_size" : 299,
+      "use_aux" : true
+    }
+}

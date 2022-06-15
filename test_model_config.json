@@ -1,12 +1,12 @@
 {
   "seed" : 1,
-  "batch_size" : 8,
+  "batch_size" : 4,
   "learning_rate" : 1e-3,
   "momentum" : 0.9,
-  "epochs" : 2,
+  "epochs" : 3,
   "train_prop" : 0.9,
   "val_prop" : 0.05,
-  "model_name": "resnet",
+  "model_name": "inception",
   "use_transfer_learning" : true,
   "use_pretrained" : true,
 
