@@ -1,0 +1,47 @@
+{
+  "config": {
+    "seed": 1,
+    "batch_size": 8,
+    "learning_rate": 0.001,
+    "momentum": 0.9,
+    "epochs": 2,
+    "train_prop": 0.9,
+    "val_prop": 0.05,
+    "model_name": "resnet",
+    "use_transfer_learning": true,
+    "use_pretrained": true,
+    "data_dir": "none",
+    "sorted_data_dir": "test_data",
+    "classes": [
+      "Failure",
+      "Success"
+    ],
+    "upsample_by_class": [
+      3,
+      1
+    ],
+    "model_path": "model.pth"
+  },
+  "epochs": [
+    {
+      "loss": 0.7904148697853088,
+      "validation_loss": 0.7850948870182037,
+      "time_taken": 3.0275161266326904
+    },
+    {
+      "loss": 0.7183190286159515,
+      "validation_loss": 0.8448947966098785,
+      "time_taken": 0.501654863357544
+    }
+  ],
+  "confusion_matrix": [
+    [
+      3,
+      5
+    ],
+    [
+      1,
+      7
+    ]
+  ]
+}

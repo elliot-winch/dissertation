@@ -21,9 +21,14 @@ import json
 #NB only works on Windows
 import winsound
 
-from architecture_alex_net import AlexNet
-from training_metadata import TrainingMetadata
+from architecture import initialize_model
 import arrange_files
+
+class NeuralNetworkOutput(object):
+    pass
+
+class EpochOutput(object):
+    pass
 
 """
 Wrapped class for training & testing a Neural Network
@@ -37,11 +42,14 @@ class NeuralNetwork(object):
     epoch_finished_sound_data = [440, 400]
     training_finished_sound_data = [880, 3000]
 
-    output = {}
+    device = None
+
+    output = NeuralNetworkOutput()
 
     def __init__(self, config):
         super(NeuralNetwork, self).__init__()
         self.config = config
+        self.output.config = config.__dict__
 
     def train(self, needs_arrange=True):
 
@@ -50,8 +58,18 @@ class NeuralNetwork(object):
         if needs_arrange:
             arrange_files.arrange_files(self.config)
 
+        num_classes = len(self.config.classes)
+        model, input_size = initialize_model(self.config.model_name, num_classes, self.config.use_transfer_learning)
+
+        print(model)
+
         #Data loaders
-        image_transform = transforms.Compose([transforms.Resize(self.config.image_size), transforms.ToTensor()])
+        image_transform = transforms.Compose([
+            transforms.Resize(input_size),
+            transforms.ToTensor(),
+            #Numbers specified by PyTorch
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
 
         train_dataset = datasets.ImageFolder(self.config.sorted_data_dir + '/train', transform=image_transform)
         train_dataloader = DataLoader(train_dataset, batch_size=self.config.batch_size, shuffle=True)
@@ -59,57 +77,69 @@ class NeuralNetwork(object):
         val_dataset = datasets.ImageFolder(self.config.sorted_data_dir + '/val', transform=image_transform)
         val_dataloader = DataLoader(val_dataset, batch_size=self.config.batch_size, shuffle=True)
 
-        images, labels = next(iter(val_dataloader))
-
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-        model = AlexNet()
-        model = model.to(device=device) #to send the model for training on either cuda or cpu
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        model = model.to(device=self.device) #to send the model for training on either cuda or cpu
 
         criterion = nn.CrossEntropyLoss() #Adjust this function to use different loss
-        optimizer = optim.SGD(model.parameters(), lr=self.config.learning_rate, momentum=self.config.momentum)
 
-        #Recording
-        training_metadata = TrainingMetadata(self.config.epoch_data_path + time.strftime("%Y%m%d-%H%M%S"))
+        parameters_to_update = [param for param in model.parameters() if param.requires_grad]
+        optimizer = optim.SGD(parameters_to_update, lr=self.config.learning_rate, momentum=self.config.momentum)
 
         total_time = 0
 
+        self.output.epochs = []
+
         #Run Epochs
-        for epoch_num in range(self.config.epochs):  # loop over the dataset N times
+        for epoch_num in range(self.config.epochs):
 
             print("\nEpoch " + str(epoch_num)) #Logging
 
-            epoch_data = self.epoch(train_dataloader, model, criterion, optimizer)
-            total_time = total_time + epoch_data[2]
+            epoch_output = self.epoch(train_dataloader, val_dataloader, model, criterion, optimizer)
+            total_time = total_time + epoch_output.time_taken
             winsound.Beep(self.epoch_finished_sound_data[0], self.epoch_finished_sound_data[1])
-            #training_metadata.record(epoch_data[0], epoch_data[1])
+
+            self.output.epochs.append(epoch_output.__dict__)
 
         print("\nTotal time (minutes): " + str(total_time / 60))
 
-        #training_metadata.write()
         torch.save(model.state_dict(), self.config.model_path)
 
+        #Alert training is complete
         winsound.Beep(self.training_finished_sound_data[0], self.training_finished_sound_data[1])
 
-    def epoch(self, train_dataloader, model, criterion, optimizer):
+    def epoch(self, train_dataloader, val_dataloader, model, criterion, optimizer):
 
         start_time = time.time()
         num_batches = len(train_dataloader)
 
+        print("Training...")
+        self.log_progress_bar(0)
         loss_sum = 0.0
-        val_loss_sum = 0.0
         for i, data in enumerate(train_dataloader, 0):
             loss_sum += self.epoch_train(data, model, criterion, optimizer).item()
+            self.log_progress_bar(i / num_batches)
+        self.log_progress_bar(1)
+
+        print("\nValidating...")
+        self.log_progress_bar(0)
+        val_loss_sum = 0.0
+        for i, data in enumerate(val_dataloader, 0):
             val_loss_sum += self.epoch_val(data, model, criterion).item()
             self.log_progress_bar(i / num_batches)
+        self.log_progress_bar(1)
 
         loss = loss_sum / len(train_dataloader)
-        validation_loss = val_loss_sum / len(train_dataloader)
+        validation_loss = val_loss_sum / len(val_dataloader)
 
         time_taken = time.time() - start_time
         print("\nEpoch time (minutes): " + str(time_taken / 60))
 
-        return [loss, validation_loss, time_taken]
+        epoch_output = EpochOutput()
+        epoch_output.loss = loss
+        epoch_output.validation_loss = validation_loss
+        epoch_output.time_taken = time_taken
+
+        return epoch_output
 
     def epoch_val(self, data, model, criterion):
 
@@ -117,7 +147,7 @@ class NeuralNetwork(object):
 
         # get the inputs; data is a list of [inputs, labels]
         inputs, labels = data
-        inputs, labels = inputs.cuda(), labels.cuda() # Send data to GPU
+        inputs, labels = inputs.to(self.device), labels.to(self.device) # Send data to C/GPU
 
         outputs = model(inputs)
         return criterion(outputs, labels)
@@ -128,7 +158,7 @@ class NeuralNetwork(object):
 
         # get the inputs; data is a list of [inputs, labels]
         inputs, labels = data
-        inputs, labels = inputs.cuda(), labels.cuda() # Send data to GPU
+        inputs, labels = inputs.to(self.device), labels.to(self.device) # Send data to C/GPU
 
         # zero the parameter gradients
         optimizer.zero_grad()
@@ -141,21 +171,23 @@ class NeuralNetwork(object):
         return loss
 
     def test(self):
-        test_transform = transforms.Compose([transforms.Resize(self.config.image_size), transforms.ToTensor()])
+        num_classes = len(self.config.classes)
+        model, input_size = initialize_model(self.config.model_name, num_classes, self.config.use_transfer_learning)
+        model.load_state_dict(torch.load(self.config.model_path))
+
+        test_transform = transforms.Compose([
+            transforms.Resize(input_size),
+            transforms.ToTensor()
+        ])
+
         test_dataset = datasets.ImageFolder(self.config.sorted_data_dir + '/test', transform=test_transform)
         test_dataloader = DataLoader(test_dataset, batch_size=self.config.batch_size, shuffle=True)
 
-        return self.confusion_matrix(test_dataloader)
-
-    def confusion_matrix(self, dataloader):
-
-        model = AlexNet()
-        model.load_state_dict(torch.load(self.config.model_path))
         y_pred = []
         y_true = []
 
         # iterate over test data
-        for inputs, labels in dataloader:
+        for inputs, labels in test_dataloader:
             output = model(inputs) # Feed Network
 
             output = (torch.max(torch.exp(output), 1)[1]).data.cpu().numpy()
@@ -165,12 +197,12 @@ class NeuralNetwork(object):
             y_true.extend(labels) # Save Truth
 
         num_classes = len(self.config.classes)
-        matrix = [ [0]*num_classes for i in range(num_classes)]
+        confusion_matrix = [ [0]*num_classes for i in range(num_classes)]
 
         for i in range(len(y_true)):
-            matrix[y_true[i]][y_pred[i]] += 1
+            confusion_matrix[y_true[i]][y_pred[i]] += 1
 
-        return matrix
+        self.output.confusion_matrix = confusion_matrix
 
     def mean_average_precision(self, matrix):
         #matrix should be square
@@ -195,10 +227,3 @@ class NeuralNetwork(object):
         percents = f"{(percent * 100):.0f}%"
 
         print("\r[", tags, spaces, "]", percents, sep="", end="", flush=True)
-
-
-    def imshow(self, img):
-        #img = img / 2 + 0.5     # unnormalize
-        npimg = img.numpy()
-        plt.imshow(np.transpose(npimg, (1, 2, 0)))
-        plt.show()

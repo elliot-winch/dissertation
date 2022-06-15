@@ -3,23 +3,23 @@ import handle_json
 import argparse
 import sys
 
-def train_model(filename, rearrange):
-        neural_network = NeuralNetwork(handle_json.json_file_to_obj(filename))
+def train_model(config_file_name, rearrange, output_file_name):
+        config = handle_json.json_file_to_obj(config_file_name)
+
+        neural_network = NeuralNetwork(config)
         neural_network.train(needs_arrange=rearrange)
+        neural_network.test()
 
-        neural_network = NeuralNetwork(handle_json.json_file_to_obj(filename))
-        confusion_matrix = neural_network.test()
-
-        print(confusion_matrix)
-        print(neural_network.mean_average_precision(confusion_matrix))
+        handle_json.obj_to_json_file(neural_network.output, output_file_name)
 
 
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--filename", help="path to config file")
+    parser.add_argument("-c", "--config_file", help="path to config file")
     parser.add_argument("-r", "--rearrange", help="does the data set need to be rearranged for processing?",
                         action="store_true")
+    parser.add_argument("-o", "--output_file", help="path to output file")
     args = parser.parse_args()
 
-    train_model(args.filename, args.rearrange)
+    train_model(args.config_file, args.rearrange, args.output_file)

@@ -14,5 +14,4 @@
   "classes" : [ "Failure", "Success" ],
   "upsample_by_class" : [3, 1],
   "model_path" : "model.pth",
-  "epoch_data_path": "EpochData/epoch_data_"
 }
