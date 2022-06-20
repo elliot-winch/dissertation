@@ -1,0 +1,53 @@
+{
+  "config": {
+    "seed": 1,
+    "batch_size": 4,
+    "learning_rate": 0.001,
+    "momentum": 0.9,
+    "epochs": 3,
+    "train_prop": 0.9,
+    "val_prop": 0.05,
+    "model_name": "inception",
+    "use_transfer_learning": true,
+    "use_pretrained": true,
+    "data_dir": "none",
+    "sorted_data_dir": "test_data",
+    "classes": [
+      "Failure",
+      "Success"
+    ],
+    "class_balance": [
+      0.5,
+      1
+    ],
+    "model_path": "model.pth"
+  },
+  "time": "Mon Jun 20 16:25:17 2022",
+  "epochs": [
+    {
+      "loss": 1.0393830140431721,
+      "validation_loss": 0.6999391913414001,
+      "time_taken": 0.7541408538818359
+    },
+    {
+      "loss": 0.8653594851493835,
+      "validation_loss": 0.7010588049888611,
+      "time_taken": 0.7461128234863281
+    },
+    {
+      "loss": 0.6940579414367676,
+      "validation_loss": 0.8724454194307327,
+      "time_taken": 0.7666335105895996
+    }
+  ],
+  "confusion_matrix": [
+    [
+      0,
+      8
+    ],
+    [
+      0,
+      8
+    ]
+  ]
+}

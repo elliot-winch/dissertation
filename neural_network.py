@@ -20,7 +20,6 @@ import json
 import winsound
 
 from architecture import initialize_model, get_architecture_data
-import arrange_files
 from progress_bar import log_progress_bar
 import handle_dataloader
 
@@ -55,20 +54,19 @@ class NeuralNetwork(object):
         self.output.time = time.ctime()
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+    def get_num_classes(self):
+        return len(self.config.classes)
 
-    def train(self, needs_arrange=True):
-
+    def train_from_config(self):
+        #Set the seed
         torch.manual_seed(self.config.seed)
 
-        if needs_arrange:
-            arrange_files.arrange_files(self.config)
+        self.init_model()
 
-        num_classes = len(self.config.classes)
-        self.model, self.architecture_data = initialize_model(self.config.model_name, num_classes, self.config.use_transfer_learning)
-
-        #Data loaders
+        #Get image transform
         image_transform = handle_dataloader.default_image_transform(self.architecture_data.image_size)
 
+        #Data loaders from config
         train_dataloader = handle_dataloader.create_dataloader(
             path = self.config.sorted_data_dir + '/train',
             image_transform = image_transform,
@@ -77,17 +75,20 @@ class NeuralNetwork(object):
             class_balance = self.config.class_balance
         )
 
-        print(len(train_dataloader))
-
         val_dataloader = handle_dataloader.create_dataloader(
             path = self.config.sorted_data_dir + '/val',
             image_transform = image_transform,
             batch_size = self.config.batch_size
         )
 
-        print(len(val_dataloader))
+        self.train(train_dataloader, val_dataloader)
 
-        self.model = self.model.to(device=self.device) #to send the model for training on either cuda or cpu
+    def train(self, train_dataloader, val_dataloader):
+
+        self.init_model()
+
+        #to send the model for training on either cuda or cpu
+        self.model = self.model.to(device=self.device)
 
         criterion = nn.CrossEntropyLoss() #Adjust this function to use different loss
 
@@ -186,22 +187,22 @@ class NeuralNetwork(object):
         optimizer.step()
         return loss
 
-    def test(self):
+    def test_from_config(self):
 
-        num_classes = len(self.config.classes)
+        self.init_model(load=True);
 
-        #Loads model from file if it's not already in memory
-        if self.model is None:
-            self.model, self.architecture_data = initialize_model(self.config.model_name, num_classes, self.config.use_transfer_learning)
-            self.model.load_state_dict(torch.load(self.config.model_path))
+        image_transform = handle_dataloader.default_image_transform(self.architecture_data.image_size)
+        train_dataloader = handle_dataloader.create_dataloader(
+            path = self.config.sorted_data_dir + '/test',
+            image_transform = image_transform,
+            batch_size = self.config.batch_size
+        )
 
-        test_transform = transforms.Compose([
-            transforms.Resize(self.architecture_data.image_size),
-            transforms.ToTensor()
-        ])
+        self.test(train_dataloader)
 
-        test_dataset = datasets.ImageFolder(self.config.sorted_data_dir + '/test', transform=test_transform)
-        test_dataloader = DataLoader(test_dataset, batch_size=self.config.batch_size, shuffle=True)
+    def test(self, test_dataloader):
+
+        self.init_model(load=True)
 
         y_pred = []
         y_true = []
@@ -219,9 +220,17 @@ class NeuralNetwork(object):
             labels = labels.data.cpu().numpy()
             y_true.extend(labels) # Save Truth
 
-        confusion_matrix = [ [0]*num_classes for i in range(num_classes)]
+        confusion_matrix = [ [0]*self.get_num_classes() for i in range(self.get_num_classes())]
 
         for i in range(len(y_true)):
             confusion_matrix[y_true[i]][y_pred[i]] += 1
 
         self.output.confusion_matrix = confusion_matrix
+
+    def init_model(self, load=False):
+        #Loads model from file if it's not already in memory
+        if self.model is None:
+            self.model, self.architecture_data = initialize_model(self.config.model_name, self.get_num_classes(), self.config.use_transfer_learning)
+
+            if load:
+                self.model.load_state_dict(torch.load(self.config.model_path))

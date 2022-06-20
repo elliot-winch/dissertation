@@ -3,12 +3,10 @@ import handle_json
 import argparse
 import sys
 
-def train_model(config_file_name, rearrange, output_file_name):
-    config = handle_json.json_file_to_obj(config_file_name)
-
+def train_model(config, output_file_name):
     neural_network = NeuralNetwork(config)
-    neural_network.train(needs_arrange=rearrange)
-    neural_network.test()
+    neural_network.train_from_config()
+    neural_network.test_from_config()
 
     handle_json.obj_to_json_file(neural_network.output, output_file_name)
 
@@ -22,4 +20,9 @@ if __name__ == '__main__':
     parser.add_argument("-o", "--output_file", help="path to output file")
     args = parser.parse_args()
 
-    train_model(args.config_file, args.rearrange, args.output_file)
+    config = handle_json.json_file_to_obj(args.config_file)
+
+    if args.rearrange:
+        arrange_files.arrange_files(self.config)
+
+    train_model(config, args.output_file)

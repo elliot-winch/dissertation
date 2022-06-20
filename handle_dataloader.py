@@ -44,8 +44,6 @@ def create_dataloader(path, image_transform, batch_size=16, use_sampling=False, 
 
         weighted_sampler = WeightedRandomSampler(weights=example_weights, num_samples=num_samples, replacement=True)
 
-        print("Upsampling results: \nClass_count: {}\nUpsample factor: {}\nNum samples: {}\nExample weights: {}".format, class_count, upsample_factor, num_samples, example_weights)
-
         return DataLoader(dataset, batch_size=batch_size, shuffle=False, sampler=weighted_sampler)
     else:
         return DataLoader(dataset, batch_size=batch_size, shuffle=True)
