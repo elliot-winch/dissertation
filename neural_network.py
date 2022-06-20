@@ -14,8 +14,6 @@ import numpy as np
 
 import time
 
-from ignite.metrics.confusion_matrix import ConfusionMatrix
-
 import json
 
 #NB only works on Windows
@@ -24,6 +22,7 @@ import winsound
 from architecture import initialize_model, get_architecture_data
 import arrange_files
 from progress_bar import log_progress_bar
+import handle_dataloader
 
 class NeuralNetworkOutput(object):
     pass
@@ -60,6 +59,7 @@ class NeuralNetwork(object):
     def train(self, needs_arrange=True):
 
         torch.manual_seed(self.config.seed)
+
         if needs_arrange:
             arrange_files.arrange_files(self.config)
 
@@ -67,18 +67,25 @@ class NeuralNetwork(object):
         self.model, self.architecture_data = initialize_model(self.config.model_name, num_classes, self.config.use_transfer_learning)
 
         #Data loaders
-        image_transform = transforms.Compose([
-            transforms.Resize(self.architecture_data.image_size),
-            transforms.ToTensor(),
-            #Numbers specified by PyTorch
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        ])
+        image_transform = handle_dataloader.default_image_transform(self.architecture_data.image_size)
 
-        train_dataset = datasets.ImageFolder(self.config.sorted_data_dir + '/train', transform=image_transform)
-        train_dataloader = DataLoader(train_dataset, batch_size=self.config.batch_size, shuffle=True)
+        train_dataloader = handle_dataloader.create_dataloader(
+            path = self.config.sorted_data_dir + '/train',
+            image_transform = image_transform,
+            batch_size = self.config.batch_size,
+            use_sampling = True,
+            class_balance = self.config.class_balance
+        )
 
-        val_dataset = datasets.ImageFolder(self.config.sorted_data_dir + '/val', transform=image_transform)
-        val_dataloader = DataLoader(val_dataset, batch_size=self.config.batch_size, shuffle=True)
+        print(len(train_dataloader))
+
+        val_dataloader = handle_dataloader.create_dataloader(
+            path = self.config.sorted_data_dir + '/val',
+            image_transform = image_transform,
+            batch_size = self.config.batch_size
+        )
+
+        print(len(val_dataloader))
 
         self.model = self.model.to(device=self.device) #to send the model for training on either cuda or cpu
 
@@ -87,11 +94,10 @@ class NeuralNetwork(object):
         parameters_to_update = [param for param in self.model.parameters() if param.requires_grad]
         optimizer = optim.SGD(parameters_to_update, lr=self.config.learning_rate, momentum=self.config.momentum)
 
-        total_time = 0
-
         self.output.epochs = []
 
         #Run Epochs
+        total_time = 0
         for epoch_num in range(self.config.epochs):
             print("\nEpoch " + str(epoch_num)) #Logging
 

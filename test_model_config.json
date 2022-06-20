@@ -10,10 +10,9 @@
   "use_transfer_learning" : true,
   "use_pretrained" : true,
 
-
   "data_dir" : "none",
   "sorted_data_dir" : "test_data",
   "classes" : [ "Failure", "Success" ],
-  "upsample_by_class" : [3, 1],
+  "class_balance" : [4, 0.5],
   "model_path" : "model.pth"
 }

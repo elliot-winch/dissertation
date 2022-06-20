@@ -13,6 +13,6 @@
   "data_dir" : "retina_data",
   "sorted_data_dir" : "sorted_data",
   "classes" : [ "Failure", "Success" ],
-  "upsample_by_class" : [1, 1],
+  "class_balance" : [1, 1],
   "model_path" : "model.pth"
 }

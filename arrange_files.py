@@ -38,6 +38,10 @@ files = {
 
 def arrange_files(config):
 
+    if os.path.exists(config.data_dir) is False:
+        print("Error: No data folder found at " + config.data_dir)
+        exit()
+
     if os.path.exists(config.sorted_data_dir) and os.path.isdir(config.sorted_data_dir):
         shutil.rmtree(config.sorted_data_dir)
 
@@ -48,9 +52,6 @@ def arrange_files(config):
 
     for i in range(len(file_names)):
         sort_file(config, file_names, i)
-
-    for i in range(len(config.classes)):
-        upsample(config.classes[i], config.upsample_by_class[i])
 
 def sort_file(config, file_names, index):
     file_name = file_names[index]
@@ -81,24 +82,6 @@ def sort_file(config, file_names, index):
 
     files[usage][result].append(location + '/' + file_name)
     shutil.copyfile(config.data_dir + '/' + file_name, location + '/' + file_name)
-
-
-def upsample(result, ratio):
-    print("Upsmapling " + result + " by " + str(ratio))
-    for usage in uses:
-        file_names = files[usage][result]
-        num_files_needed = max(0, len(file_names) * (ratio - 1))
-
-        for i in range(num_files_needed):
-            original_file_name = file_names[i % len(file_names)]
-
-            [file_name, extension] = original_file_name.split('.')
-
-            file_name += "_" + str(i // len(file_names)) + '.' + extension
-
-            files[usage][result].append(file_name)
-            shutil.copyfile(original_file_name, file_name)
-
 
 if __name__ == '__main__':
 
