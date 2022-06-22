@@ -4,8 +4,6 @@ from lerp import lerp_vector
 import argparse
 from matplotlib import pyplot as plt
 
-
-
 def plot_loss(result, show=True, loss_color='blue', val_color='orange'):
     losses = [l.loss for l in result.epochs]
     val_losses = [l.validation_loss for l in result.epochs]
