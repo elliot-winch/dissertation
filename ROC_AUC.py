@@ -1,23 +1,8 @@
-import handle_json
+import load_results
 import measure_performance
-
-from os import listdir
-from os.path import isfile, join
 
 import argparse
 from matplotlib import pyplot as plt
-
-
-json_extension = ".json"
-
-def load_results(resultsFolder):
-    json_file_names = [f for f in listdir(resultsFolder) if isfile(join(resultsFolder, f)) and f.endswith(json_extension)]
-
-    results = []
-    for json_file in json_file_names:
-        results.append(handle_json.json_file_to_obj(join(resultsFolder, json_file)))
-
-    return results, json_file_names
 
 def trapeziod_area(base, h1, h2):
     base = abs(base)
@@ -67,7 +52,7 @@ if __name__ == '__main__':
     parser.add_argument("-f", "--folder_name", help="path to results files")
     args = parser.parse_args()
 
-    results, file_names = load_results(args.folder_name)
+    results, file_names = load_results.load_results(args.folder_name)
     fps, tps, result_names = roc(results)
 
     auc = auc(fps, tps)
