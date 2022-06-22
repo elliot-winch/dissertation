@@ -1,9 +1,8 @@
 from neural_network import NeuralNetwork
 import handle_json
 import argparse
-import sys
 
-def train_model(config, output_file_name):
+def train_model(config):
     neural_network = NeuralNetwork(config)
     neural_network.train_from_config()
     neural_network.test_from_config()
@@ -18,6 +17,7 @@ if __name__ == '__main__':
     parser.add_argument("-r", "--rearrange", help="does the data set need to be rearranged for processing?",
                         action="store_true")
     parser.add_argument("-o", "--output_file", help="path to output file")
+    parser.add_argument("-n", "--model_name", help="name for a model")
     args = parser.parse_args()
 
     config = handle_json.json_file_to_obj(args.config_file)
@@ -25,4 +25,9 @@ if __name__ == '__main__':
     if args.rearrange:
         arrange_files.arrange_files(self.config)
 
-    train_model(config, args.output_file)
+    output = train_model(config, args.output_file)
+
+    if hasattr(args.model_name)
+        output.name = args.model_name
+
+    handle_json.obj_to_json_file(output, output_file_name)

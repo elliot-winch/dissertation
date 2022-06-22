@@ -12,30 +12,30 @@ def accuracy(matrix):
 
             if i is j:
                 total_correct += matrix[i][j]
-
+                
     return total_correct / float(total)
 
 def error_rate(matrix):
     return 1 - accuracy(matrix)
 
-def recall(matrix, row):
+def recall(matrix, row, _class):
     total = 0
     total_correct = 0
     for i in range(len(matrix[row])):
         total += matrix[row][i]
 
-        if i is row:
+        if i == _class:
             total_correct += matrix[row][i]
 
     return total_correct / float(total)
 
-def precision(matrix, column):
+def precision(matrix, column, _class):
     total = 0
     total_correct = 0
     for i in range(len(matrix)):
         total += matrix[i][column]
 
-        if i is column:
+        if i == _class:
             total_correct += matrix[i][column]
 
     return total_correct / float(total)
