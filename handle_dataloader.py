@@ -19,6 +19,7 @@ def default_image_transform(image_size):
 def create_dataloader(path, image_transform, batch_size=16, use_sampling=False, class_balance=None):
 
     dataset = datasets.ImageFolder(path, transform=image_transform)
+    generator = torch.Generator()
 
     if use_sampling and class_balance is not None:
         class_count = get_class_count(dataset)
@@ -44,6 +45,6 @@ def create_dataloader(path, image_transform, batch_size=16, use_sampling=False, 
 
         weighted_sampler = WeightedRandomSampler(weights=example_weights, num_samples=num_samples, replacement=True)
 
-        return DataLoader(dataset, batch_size=batch_size, shuffle=False, sampler=weighted_sampler)
+        return DataLoader(dataset, batch_size=batch_size, shuffle=False, sampler=weighted_sampler, generator=generator)
     else:
-        return DataLoader(dataset, batch_size=batch_size, shuffle=True)
+        return DataLoader(dataset, batch_size=batch_size, shuffle=True, generator=generator)

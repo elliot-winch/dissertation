@@ -26,13 +26,11 @@ def show(ax):
 
 if __name__ == '__main__':
 
-    """
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--folder_name", help="path to results files")
     args = parser.parse_args()
-    """
 
-    results, _ = load_results.load_results("experiment_upsampling_2106") #args.folder_name)
+    results, _ = load_results.load_results(args.folder_name)
 
     fig = plt.figure()
     ax = plt.subplot(111)
@@ -53,21 +51,3 @@ if __name__ == '__main__':
         )
 
     show(ax)
-
-    """
-    results, file_names = load_results.load_results(args.folder_name)
-    fps, tps, result_names = roc(results)
-
-    auc = auc(fps, tps)
-
-    print("ROC: Area under curve is {}\nFile Names: {}\nFalse Positives: {}\nTrue Positives:{}".format(auc, file_names, fps, tps))
-    plt.plot(fps, tps, '-x')
-
-    for i in range(0, len(result_names)):
-        plt.annotate(result_names[i], [fps[i], tps[i]])
-
-    plt.plot([0, 1], [0, 1], '--')
-    plt.xlim([0, 1])
-    plt.ylim([0, 1])
-    plt.show()
-    """

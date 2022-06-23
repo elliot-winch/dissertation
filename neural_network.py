@@ -58,6 +58,10 @@ class NeuralNetwork(object):
         return len(self.config.classes)
 
     def train_from_config(self):
+
+        #Experiment: seeting num threads to 1
+        torch.set_num_threads(1)
+
         #Set the seed
         torch.manual_seed(self.config.seed)
 

@@ -25,9 +25,9 @@ if __name__ == '__main__':
     if args.rearrange:
         arrange_files.arrange_files(self.config)
 
-    output = train_model(config, args.output_file)
+    output = train_model(config)
 
-    if hasattr(args.model_name)
+    if hasattr(args.model_name):
         output.name = args.model_name
 
     handle_json.obj_to_json_file(output, output_file_name)

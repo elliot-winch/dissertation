@@ -11,7 +11,7 @@
   "use_pretrained" : true,
 
   "data_dir" : "none",
-  "sorted_data_dir" : "test_data",
+  "sorted_data_dir" : "sorted_data",
   "classes" : [ "Failure", "Success" ],
   "class_balance" : [1, 1],
   "model_path" : "model.pth"
