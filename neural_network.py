@@ -29,6 +29,10 @@ class NeuralNetworkOutput(object):
 class EpochOutput(object):
     pass
 
+class Struct:
+    def __init__(self, **entries):
+        self.__dict__.update(entries)
+
 """
 Wrapped class for training & testing a Neural Network
 
@@ -45,6 +49,11 @@ class NeuralNetwork(object):
     model = None
     architecture_data = None
 
+    cancel = False
+    finished_training = False
+
+    on_epoch_finished = []
+
     output = NeuralNetworkOutput()
 
     def __init__(self, config):
@@ -59,8 +68,8 @@ class NeuralNetwork(object):
 
     def train_from_config(self):
 
-        #Experiment: seeting num threads to 1
-        torch.set_num_threads(1)
+        #Experiment: setting num threads to 1
+        #torch.set_num_threads(1)
 
         #Set the seed
         torch.manual_seed(self.config.seed)
@@ -108,16 +117,27 @@ class NeuralNetwork(object):
 
             epoch_output = self.epoch(train_dataloader, val_dataloader, criterion, optimizer)
             total_time = total_time + epoch_output.time_taken
-            winsound.Beep(self.epoch_finished_sound_data[0], self.epoch_finished_sound_data[1])
+            self.output.epochs.append(Struct(**epoch_output.__dict__))
 
-            self.output.epochs.append(epoch_output.__dict__)
+            #TODO: might be worth writing an Event class
+            [f() for f in self.on_epoch_finished]
+
+            if self.cancel:
+                break
+            else:
+                winsound.Beep(self.epoch_finished_sound_data[0], self.epoch_finished_sound_data[1])
 
         print("\nTotal time (minutes): " + str(total_time / 60))
 
-        torch.save(self.model.state_dict(), self.config.model_path)
+        self.save_model()
 
         #Alert training is complete
-        winsound.Beep(self.training_finished_sound_data[0], self.training_finished_sound_data[1])
+        if self.cancel is False:
+            winsound.Beep(self.training_finished_sound_data[0], self.training_finished_sound_data[1])
+
+    def save_model(self):
+        torch.save(self.model.state_dict(), self.config.model_path)
+        self.finished_training = True
 
     def epoch(self, train_dataloader, val_dataloader, criterion, optimizer):
 

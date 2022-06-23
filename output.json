@@ -1,0 +1,27 @@
+{
+  "config": {
+    "seed": 1,
+    "batch_size": 4,
+    "learning_rate": 0.0001,
+    "momentum": 0.9,
+    "epochs": 3,
+    "train_prop": 0.9,
+    "val_prop": 0.05,
+    "model_name": "inception",
+    "use_transfer_learning": true,
+    "use_pretrained": true,
+    "data_dir": "none",
+    "sorted_data_dir": "test_data",
+    "classes": [
+      "Failure",
+      "Success"
+    ],
+    "class_balance": [
+      1,
+      1
+    ],
+    "model_path": "model.pth"
+  },
+  "time": "Thu Jun 23 16:10:51 2022",
+  "epochs": [
+    

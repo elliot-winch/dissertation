@@ -4,25 +4,36 @@ from lerp import lerp_vector
 import argparse
 from matplotlib import pyplot as plt
 
-def plot_loss(result, show=True, loss_color='blue', val_color='orange'):
-    losses = [l.loss for l in result.epochs]
-    val_losses = [l.validation_loss for l in result.epochs]
 
-    plt.plot(losses, label="{} loss".format(result.name), color=loss_color)
-    plt.plot(val_losses, label="{} Validation loss".format(result.name), color=val_color)
+class PlotLoss(object):
 
-    if show:
-        show()
+    fig = None
+    ax = None
 
-def show(ax):
-    box = ax.get_position()
-    ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
-    ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    def __init__(self):
+        super(PlotLoss, self).__init__()
+        self.fig = plt.figure()
+        self.ax = plt.subplot(111)
 
-    plt.xlabel("Epochs")
-    plt.ylabel("Loss")
+    def plot_loss(self, name, epochs, loss_color='blue', val_color='orange'):
+        losses = [l.loss for l in epochs]
+        val_losses = [l.validation_loss for l in epochs]
 
-    plt.show()
+        plt.plot(losses, label="{} Training Loss".format(name), color=loss_color)
+        plt.plot(val_losses, label="{} Validation Loss".format(name), color=val_color)
+
+    def show(self):
+        box = self.ax.get_position()
+        self.ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+        self.ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+
+        plt.xlabel("Epochs")
+        plt.ylabel("Loss")
+
+        plt.show()
+
+    def hide(self):
+        plt.close(self.fig)
 
 if __name__ == '__main__':
 
@@ -32,8 +43,7 @@ if __name__ == '__main__':
 
     results, _ = load_results.load_results(args.folder_name)
 
-    fig = plt.figure()
-    ax = plt.subplot(111)
+    plot = PlotLoss()
 
     loss_color_start = [0,0,1]
     loss_color_end = [0,0.75,1]
@@ -43,11 +53,15 @@ if __name__ == '__main__':
     for i in range(0, len(results)):
         color_level = i / (len(results) - 1)
 
-        plot_loss(
-            results[i],
-            show=False,
+        print(str(results[i].name))
+        print(results[i].epochs)
+        print(plot.ax)
+
+        plot.plot_loss(
+            name=results[i].name,
+            epochs=results[i].epochs,
             loss_color=lerp_vector(loss_color_start, loss_color_end, color_level),
-            val_color=lerp_vector(val_color_start, val_color_end, color_level),
+            val_color=lerp_vector(val_color_start, val_color_end, color_level)
         )
 
-    show(ax)
+    plot.show()
