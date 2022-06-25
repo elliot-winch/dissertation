@@ -11,6 +11,8 @@ import plot_loss
 def train_model(config):
     neural_network = NeuralNetwork(config)
     loss_graph = plot_loss.PlotLoss()
+    loss_graph.set_epoch_count(config.epochs)
+    loss_graph.show()
 
     #TODO: might be worth writing a Event class
     neural_network.on_epoch_finished.append(lambda: plot_during_training(neural_network, loss_graph))
@@ -20,6 +22,8 @@ def train_model(config):
     cancel_thread.start()
     neural_network.train_from_config()
     cancel_thread.join()
+
+    loss_graph.hide()
 
     neural_network.test_from_config()
 
@@ -40,13 +44,7 @@ def check_cancel(neural_network):
             time.sleep(1)
 
 def plot_during_training(neural_network, loss_graph):
-    loss_graph.hide()
-
-    print(neural_network.output.epochs)
     loss_graph.plot_loss('Current', neural_network.output.epochs)
-
-    #TODO: this is blocking!!!
-    loss_graph.show()
 
 if __name__ == '__main__':
 

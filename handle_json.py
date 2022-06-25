@@ -7,4 +7,4 @@ def json_file_to_obj(file_name):
 
 def obj_to_json_file(object, file_name):
     with open(file_name, "w") as file:
-             json.dump(object.__dict__, file, indent=2)
+            json.dump(object.__dict__, file, indent=2, default=lambda o: getattr(o, '__dict__', str(o)))

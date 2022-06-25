@@ -4,7 +4,7 @@
     "batch_size": 4,
     "learning_rate": 0.0001,
     "momentum": 0.9,
-    "epochs": 3,
+    "epochs": 10,
     "train_prop": 0.9,
     "val_prop": 0.05,
     "model_name": "inception",
@@ -22,6 +22,68 @@
     ],
     "model_path": "model.pth"
   },
-  "time": "Thu Jun 23 16:10:51 2022",
+  "time": "Sat Jun 25 13:16:38 2022",
   "epochs": [
-    
+    {
+      "loss": 0.961975485086441,
+      "validation_loss": 0.698151245713234,
+      "time_taken": 3.0186479091644287
+    },
+    {
+      "loss": 1.0140906423330307,
+      "validation_loss": 0.6751068383455276,
+      "time_taken": 0.8993222713470459
+    },
+    {
+      "loss": 0.9613692462444305,
+      "validation_loss": 0.6884344220161438,
+      "time_taken": 0.8901064395904541
+    },
+    {
+      "loss": 0.9667668342590332,
+      "validation_loss": 0.6894456446170807,
+      "time_taken": 0.8956997394561768
+    },
+    {
+      "loss": 1.1238546073436737,
+      "validation_loss": 0.7056121975183487,
+      "time_taken": 0.9023799896240234
+    },
+    {
+      "loss": 0.99081751704216,
+      "validation_loss": 0.7105319201946259,
+      "time_taken": 0.8942208290100098
+    },
+    {
+      "loss": 0.8815938532352448,
+      "validation_loss": 0.7071385681629181,
+      "time_taken": 0.901364803314209
+    },
+    {
+      "loss": 1.0479751229286194,
+      "validation_loss": 0.7028137147426605,
+      "time_taken": 0.8958899974822998
+    },
+    {
+      "loss": 1.0101443380117416,
+      "validation_loss": 0.704197496175766,
+      "time_taken": 0.9046516418457031
+    },
+    {
+      "loss": 0.9910107553005219,
+      "validation_loss": 0.7100702822208405,
+      "time_taken": 0.8956577777862549
+    }
+  ],
+  "confusion_matrix": [
+    [
+      1,
+      7
+    ],
+    [
+      0,
+      8
+    ]
+  ],
+  "name": null
+}

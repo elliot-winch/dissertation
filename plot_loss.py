@@ -7,13 +7,8 @@ from matplotlib import pyplot as plt
 
 class PlotLoss(object):
 
-    fig = None
-    ax = None
-
     def __init__(self):
         super(PlotLoss, self).__init__()
-        self.fig = plt.figure()
-        self.ax = plt.subplot(111)
 
     def plot_loss(self, name, epochs, loss_color='blue', val_color='orange'):
         losses = [l.loss for l in epochs]
@@ -22,18 +17,25 @@ class PlotLoss(object):
         plt.plot(losses, label="{} Training Loss".format(name), color=loss_color)
         plt.plot(val_losses, label="{} Validation Loss".format(name), color=val_color)
 
+        plt.pause(0.01)
+
     def show(self):
-        box = self.ax.get_position()
-        self.ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
-        self.ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+        #box = self.ax.get_position()
+        #self.ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+        #self.ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
         plt.xlabel("Epochs")
         plt.ylabel("Loss")
 
-        plt.show()
+        plt.ion()
+        plt.pause(0.01)
+        plt.show(block = False)
 
     def hide(self):
-        plt.close(self.fig)
+        plt.close()
+
+    def set_epoch_count(self, epoch_count):
+        plt.xlim([0, epoch_count - 1])
 
 if __name__ == '__main__':
 

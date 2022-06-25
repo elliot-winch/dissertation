@@ -29,10 +29,6 @@ class NeuralNetworkOutput(object):
 class EpochOutput(object):
     pass
 
-class Struct:
-    def __init__(self, **entries):
-        self.__dict__.update(entries)
-
 """
 Wrapped class for training & testing a Neural Network
 
@@ -59,7 +55,7 @@ class NeuralNetwork(object):
     def __init__(self, config):
         super(NeuralNetwork, self).__init__()
         self.config = config
-        self.output.config = config.__dict__
+        self.output.config = config
         self.output.time = time.ctime()
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -117,7 +113,7 @@ class NeuralNetwork(object):
 
             epoch_output = self.epoch(train_dataloader, val_dataloader, criterion, optimizer)
             total_time = total_time + epoch_output.time_taken
-            self.output.epochs.append(Struct(**epoch_output.__dict__))
+            self.output.epochs.append(epoch_output)
 
             #TODO: might be worth writing an Event class
             [f() for f in self.on_epoch_finished]
