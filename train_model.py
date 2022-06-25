@@ -12,7 +12,7 @@ def train_model(config):
     neural_network = NeuralNetwork(config)
     loss_graph = plot_loss.PlotLoss()
     loss_graph.set_epoch_count(config.epochs)
-    loss_graph.show()
+    loss_graph.show(block=False)
 
     #TODO: might be worth writing a Event class
     neural_network.on_epoch_finished.append(lambda: plot_during_training(neural_network, loss_graph))
