@@ -1,0 +1,114 @@
+{
+  "config": {
+    "seed": 1,
+    "batch_size": 32,
+    "learning_rate": 0.0001,
+    "momentum": 0.9,
+    "epochs": 15,
+    "train_prop": 0.9,
+    "val_prop": 0.05,
+    "model_name": "inception",
+    "use_transfer_learning": true,
+    "use_pretrained": true,
+    "loss_function_class_weights": [
+      10,
+      1
+    ],
+    "data_dir": "none",
+    "sorted_data_dir": "sorted_data",
+    "classes": [
+      "Failure",
+      "Success"
+    ],
+    "model_path": "model.pth"
+  },
+  "time": "Sat Jun 25 15:45:41 2022",
+  "epochs": [
+    {
+      "loss": 0.9979338731995241,
+      "validation_loss": 0.679972914132205,
+      "time_taken": 132.68788647651672
+    },
+    {
+      "loss": 0.9799681691562429,
+      "validation_loss": 0.6792578101158142,
+      "time_taken": 132.72563767433167
+    },
+    {
+      "loss": 0.9628476452699957,
+      "validation_loss": 0.6785838007926941,
+      "time_taken": 132.7931833267212
+    },
+    {
+      "loss": 0.9596655585549094,
+      "validation_loss": 0.6767939491705461,
+      "time_taken": 132.9295835494995
+    },
+    {
+      "loss": 0.9522899978938587,
+      "validation_loss": 0.6603952212767168,
+      "time_taken": 132.77861094474792
+    },
+    {
+      "loss": 0.946143388748169,
+      "validation_loss": 0.6770850149067965,
+      "time_taken": 134.81092309951782
+    },
+    {
+      "loss": 0.9405435186656401,
+      "validation_loss": 0.6575801426714117,
+      "time_taken": 134.7885868549347
+    },
+    {
+      "loss": 0.9383073608505534,
+      "validation_loss": 0.6640148325399919,
+      "time_taken": 132.78420758247375
+    },
+    {
+      "loss": 0.9388365429990432,
+      "validation_loss": 0.6604468687014147,
+      "time_taken": 133.2805302143097
+    },
+    {
+      "loss": 0.9270908791113665,
+      "validation_loss": 0.6828241348266602,
+      "time_taken": 132.95123052597046
+    },
+    {
+      "loss": 0.9326690990019609,
+      "validation_loss": 0.6617349006912925,
+      "time_taken": 132.77106976509094
+    },
+    {
+      "loss": 0.9334871778513658,
+      "validation_loss": 0.6620556657964533,
+      "time_taken": 132.78657174110413
+    },
+    {
+      "loss": 0.9245040780082744,
+      "validation_loss": 0.6735223152420737,
+      "time_taken": 133.1303870677948
+    },
+    {
+      "loss": 0.9181939417665655,
+      "validation_loss": 0.6713879921219565,
+      "time_taken": 132.7696533203125
+    },
+    {
+      "loss": 0.9273046567478281,
+      "validation_loss": 0.6579731865362688,
+      "time_taken": 132.78649425506592
+    }
+  ],
+  "confusion_matrix": [
+    [
+      15,
+      17
+    ],
+    [
+      97,
+      199
+    ]
+  ],
+  "name": "[10,1].json"
+}

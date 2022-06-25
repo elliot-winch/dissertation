@@ -1,19 +1,19 @@
 {
   "seed" : 1,
-  "batch_size" : 4,
+  "batch_size" : 32,
   "learning_rate" : 1e-4,
   "momentum" : 0.9,
-  "epochs" : 3,
+  "epochs" : 15,
   "train_prop" : 0.9,
   "val_prop" : 0.05,
   "model_name": "inception",
   "use_transfer_learning" : true,
   "use_pretrained" : true,
-  "class_weights" : [1,1],
+  "loss_function_class_weights" : [10,1],
 
   "data_dir" : "none",
   "sorted_data_dir" : "sorted_data",
   "classes" : [ "Failure", "Success" ],
-  "class_balance" : [1, 1],
+
   "model_path" : "model.pth"
 }

@@ -1,9 +1,8 @@
-import load_results
-from lerp import lerp_vector
-
 import argparse
 from matplotlib import pyplot as plt
 
+import handle_json
+from lerp import lerp_vector
 
 class PlotLoss(object):
 
@@ -11,13 +10,14 @@ class PlotLoss(object):
         super(PlotLoss, self).__init__()
 
     def plot_loss(self, name, epochs, loss_color='blue', val_color='orange'):
+
         losses = [l.loss for l in epochs]
         val_losses = [l.validation_loss for l in epochs]
 
         plt.plot(losses, label="{} Training Loss".format(name), color=loss_color)
         plt.plot(val_losses, label="{} Validation Loss".format(name), color=val_color)
 
-        plt.pause(0.01)
+        plt.pause(0.1)
 
     def show(self, block):
         plt.xlabel("Epochs")
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     parser.add_argument("-f", "--folder_name", help="path to results files")
     args = parser.parse_args()
 
-    results, _ = load_results.load_results(args.folder_name)
+    results, _ = handle_json.load_jsons(args.folder_name)
 
     plot = PlotLoss()
 
@@ -59,4 +59,5 @@ if __name__ == '__main__':
         )
 
         plot.show(block = False)
+
     input("Press ENTER to close")

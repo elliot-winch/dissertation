@@ -1,0 +1,114 @@
+{
+  "config": {
+    "seed": 1,
+    "batch_size": 32,
+    "learning_rate": 0.0001,
+    "momentum": 0.9,
+    "epochs": 15,
+    "train_prop": 0.9,
+    "val_prop": 0.05,
+    "model_name": "inception",
+    "use_transfer_learning": true,
+    "use_pretrained": true,
+    "loss_function_class_weights": [
+      25,
+      1
+    ],
+    "data_dir": "none",
+    "sorted_data_dir": "sorted_data",
+    "classes": [
+      "Failure",
+      "Success"
+    ],
+    "model_path": "model.pth"
+  },
+  "time": "Sat Jun 25 16:19:18 2022",
+  "epochs": [
+    {
+      "loss": 0.9252025360729605,
+      "validation_loss": 0.5674601603638042,
+      "time_taken": 133.29608583450317
+    },
+    {
+      "loss": 0.9158717970797084,
+      "validation_loss": 0.6557381261478771,
+      "time_taken": 133.0099549293518
+    },
+    {
+      "loss": 0.8913487154532244,
+      "validation_loss": 0.6031655750491403,
+      "time_taken": 133.16921424865723
+    },
+    {
+      "loss": 0.9114617498163233,
+      "validation_loss": 0.5793058926408942,
+      "time_taken": 133.33306860923767
+    },
+    {
+      "loss": 0.8913242466309491,
+      "validation_loss": 0.5601378760554574,
+      "time_taken": 132.85540413856506
+    },
+    {
+      "loss": 0.877172619901239,
+      "validation_loss": 0.578400270505385,
+      "time_taken": 133.01585125923157
+    },
+    {
+      "loss": 0.8687072597085473,
+      "validation_loss": 0.5629115158861334,
+      "time_taken": 132.98019409179688
+    },
+    {
+      "loss": 0.8784547900771075,
+      "validation_loss": 0.5655352933840319,
+      "time_taken": 132.8424036502838
+    },
+    {
+      "loss": 0.8662032367073916,
+      "validation_loss": 0.566176945512945,
+      "time_taken": 132.85505843162537
+    },
+    {
+      "loss": 0.8763689427452291,
+      "validation_loss": 0.6422947130419991,
+      "time_taken": 132.8159155845642
+    },
+    {
+      "loss": 0.8646161173754198,
+      "validation_loss": 0.601637450131503,
+      "time_taken": 132.83876371383667
+    },
+    {
+      "loss": 0.8751883047787263,
+      "validation_loss": 0.595257349989631,
+      "time_taken": 132.82660746574402
+    },
+    {
+      "loss": 0.8739634012793475,
+      "validation_loss": 0.599597532640804,
+      "time_taken": 134.01656436920166
+    },
+    {
+      "loss": 0.8606853854847464,
+      "validation_loss": 0.5689774805849249,
+      "time_taken": 132.84405040740967
+    },
+    {
+      "loss": 0.8603861475373334,
+      "validation_loss": 0.5655746839263223,
+      "time_taken": 133.17709469795227
+    }
+  ],
+  "confusion_matrix": [
+    [
+      31,
+      1
+    ],
+    [
+      286,
+      10
+    ]
+  ],
+  "name": "[25,1].json"
+}

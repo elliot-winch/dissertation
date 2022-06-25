@@ -1,8 +1,8 @@
-import load_results
-import measure_performance
-
 import argparse
 from matplotlib import pyplot as plt
+
+import handle_json
+import measure_performance
 
 def trapeziod_area(base, h1, h2):
     base = abs(base)
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     parser.add_argument("-f", "--folder_name", help="path to results files")
     args = parser.parse_args()
 
-    results, file_names = load_results.load_results(args.folder_name)
+    results, file_names = handle_json.load_jsons(args.folder_name)
     fps, tps, result_names = roc(results)
 
     auc = auc(fps, tps)

@@ -65,7 +65,7 @@ class NeuralNetwork(object):
     def train_from_config(self):
 
         #Experiment: setting num threads to 1
-        #torch.set_num_threads(1)
+        torch.set_num_threads(1)
 
         #Set the seed
         torch.manual_seed(self.config.seed)
@@ -75,13 +75,17 @@ class NeuralNetwork(object):
         #Get image transform
         image_transform = handle_dataloader.default_image_transform(self.architecture_data.image_size)
 
+        class_balance = None
+        if hasattr(self.config, 'class_balance'):
+            class_balance = self.config.class_balance
+
         #Data loaders from config
         train_dataloader = handle_dataloader.create_dataloader(
             path = self.config.sorted_data_dir + '/train',
             image_transform = image_transform,
             batch_size = self.config.batch_size,
             use_sampling = True,
-            class_balance = self.config.class_balance
+            class_balance = class_balance
         )
 
         val_dataloader = handle_dataloader.create_dataloader(
@@ -99,7 +103,8 @@ class NeuralNetwork(object):
         #to send the model for training on either cuda or cpu
         self.model = self.model.to(device=self.device)
 
-        criterion = nn.CrossEntropyLoss() #Adjust this function to use different loss
+        weight_tensor = torch.tensor(self.config.loss_function_class_weights, dtype=torch.float, device=self.device)
+        criterion = nn.CrossEntropyLoss(weight_tensor)
 
         parameters_to_update = [param for param in self.model.parameters() if param.requires_grad]
         optimizer = optim.SGD(parameters_to_update, lr=self.config.learning_rate, momentum=self.config.momentum)
