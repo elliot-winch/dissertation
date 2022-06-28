@@ -9,7 +9,9 @@
   "model_name": "inception",
   "use_transfer_learning" : true,
   "use_pretrained" : true,
-  "class_weights" : [1,1],
+  "loss_function_class_weights" : [1,1],
+  "learning_rate_scheduler" : "ReduceLROnPlateau",
+  "learning_rate_patience" : 5,
 
   "data_dir" : "none",
   "sorted_data_dir" : "sorted_data",

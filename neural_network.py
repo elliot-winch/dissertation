@@ -22,6 +22,7 @@ import winsound
 from architecture import initialize_model, get_architecture_data
 from progress_bar import log_progress_bar
 import handle_dataloader
+import learning_rate_scheduler
 
 class NeuralNetworkOutput(object):
     pass
@@ -108,6 +109,7 @@ class NeuralNetwork(object):
 
         parameters_to_update = [param for param in self.model.parameters() if param.requires_grad]
         optimizer = optim.SGD(parameters_to_update, lr=self.config.learning_rate, momentum=self.config.momentum)
+        scheduler = learning_rate_scheduler.get_scheduler(self.config, optimizer)
 
         self.output.epochs = []
 
@@ -116,7 +118,7 @@ class NeuralNetwork(object):
         for epoch_num in range(self.config.epochs):
             print("\nEpoch " + str(epoch_num)) #Logging
 
-            epoch_output = self.epoch(train_dataloader, val_dataloader, criterion, optimizer)
+            epoch_output = self.epoch(train_dataloader, val_dataloader, criterion, optimizer, scheduler)
             total_time = total_time + epoch_output.time_taken
             self.output.epochs.append(epoch_output)
 
@@ -140,7 +142,7 @@ class NeuralNetwork(object):
         torch.save(self.model.state_dict(), self.config.model_path)
         self.finished_training = True
 
-    def epoch(self, train_dataloader, val_dataloader, criterion, optimizer):
+    def epoch(self, train_dataloader, val_dataloader, criterion, optimizer, scheduler):
 
         start_time = time.time()
 
@@ -165,12 +167,16 @@ class NeuralNetwork(object):
         loss = loss_sum / train_num_batches
         validation_loss = val_loss_sum / val_num_batches
 
+        if scheduler is not None:
+            scheduler.step(validation_loss)
+
         time_taken = time.time() - start_time
         print("\nEpoch time (minutes): " + str(time_taken / 60))
 
         epoch_output = EpochOutput()
         epoch_output.loss = loss
         epoch_output.validation_loss = validation_loss
+        epoch_output.learning_rate = optimizer.param_groups[0]['lr']
         epoch_output.time_taken = time_taken
 
         return epoch_output

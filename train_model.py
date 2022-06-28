@@ -44,7 +44,7 @@ def check_cancel(neural_network):
             time.sleep(1)
 
 def plot_during_training(neural_network, loss_graph):
-    loss_graph.plot_loss('Current', neural_network.output.epochs)
+    loss_graph.plot_loss('Current', neural_network.output.epochs, plot_learning_rate=True)
 
 if __name__ == '__main__':
 

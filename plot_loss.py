@@ -9,28 +9,28 @@ class PlotLoss(object):
     def __init__(self):
         super(PlotLoss, self).__init__()
 
-    def plot_loss(self, name, epochs, loss_color='blue', val_color='orange'):
+    def plot_loss(self, name, epochs, loss_color='blue', val_color='orange', plot_learning_rate=False):
 
-        losses = [l.loss for l in epochs]
-        val_losses = [l.validation_loss for l in epochs]
+        plt.plot([epoch.loss for epoch in epochs], label="{} Train".format(name), color=loss_color)
+        plt.plot([epoch.validation_loss for epoch in epochs], label="{} Val".format(name), color=val_color)
 
-        plt.plot(losses, label="{} Train".format(name), color=loss_color)
-        plt.plot(val_losses, label="{} Val".format(name), color=val_color)
+        if plot_learning_rate:
+            #TODO: plot on second Y axis
+            plt.plot([epoch.learning_rate for epoch in epochs], label="{} Val".format(name), color='red', linestyle="--")
 
         plt.pause(0.1)
 
     def show(self, block):
 
-
         plt.legend(bbox_to_anchor=(1, 1))
-        plt.tight_layout()
 
         plt.xlabel("Epochs")
         plt.ylabel("Loss")
 
         plt.ion()
-        plt.pause(0.01)
+        plt.tight_layout()
         plt.show(block = block)
+        plt.pause(0.1)
 
     def hide(self):
         plt.close()
@@ -61,7 +61,8 @@ if __name__ == '__main__':
             name=results[i].name,
             epochs=results[i].epochs,
             loss_color=lerp_vector(loss_color_start, loss_color_end, color_level),
-            val_color=lerp_vector(val_color_start, val_color_end, color_level)
+            val_color=lerp_vector(val_color_start, val_color_end, color_level),
+            plot_learning_rate=False
         )
 
         plot.show(block = False)
