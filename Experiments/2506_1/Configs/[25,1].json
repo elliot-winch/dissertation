@@ -10,6 +10,7 @@
   "use_transfer_learning" : true,
   "use_pretrained" : true,
   "loss_function_class_weights" : [25,1],
+  "order": 4,
 
   "data_dir" : "none",
   "sorted_data_dir" : "sorted_data",

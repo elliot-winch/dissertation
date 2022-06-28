@@ -14,12 +14,17 @@ class PlotLoss(object):
         losses = [l.loss for l in epochs]
         val_losses = [l.validation_loss for l in epochs]
 
-        plt.plot(losses, label="{} Training Loss".format(name), color=loss_color)
-        plt.plot(val_losses, label="{} Validation Loss".format(name), color=val_color)
+        plt.plot(losses, label="{} Train".format(name), color=loss_color)
+        plt.plot(val_losses, label="{} Val".format(name), color=val_color)
 
         plt.pause(0.1)
 
     def show(self, block):
+
+
+        plt.legend(bbox_to_anchor=(1, 1))
+        plt.tight_layout()
+
         plt.xlabel("Epochs")
         plt.ylabel("Loss")
 
@@ -39,7 +44,8 @@ if __name__ == '__main__':
     parser.add_argument("-f", "--folder_name", help="path to results files")
     args = parser.parse_args()
 
-    results, _ = handle_json.load_jsons(args.folder_name)
+    order_by = lambda results : [result.config.order for result in results]
+    results, file_names = handle_json.load_jsons(args.folder_name, order_by=order_by)
 
     plot = PlotLoss()
 

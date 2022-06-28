@@ -13,7 +13,7 @@ if __name__ == '__main__':
     configs, names = handle_json.load_jsons(args.config_folder_name)
 
     for i in range(0, len(configs)):
-        output_file = "{}/{}".format(args.output_folder_name, names[i])
+        output_file = "{}_{}/{}".format(i, args.output_folder_name, names[i])
         print("Running training for {}".format(output_file))
         output = train_model.train_model(configs[i])
         output.name = names[i]

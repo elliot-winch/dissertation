@@ -14,6 +14,7 @@
       1,
       1
     ],
+    "order": 1,
     "data_dir": "none",
     "sorted_data_dir": "sorted_data",
     "classes": [
