@@ -10,7 +10,7 @@ if __name__ == '__main__':
     parser.add_argument("-o", "--output_folder_name", help="path to write output files")
     args = parser.parse_args()
 
-    order_by = lambda results : [config.order for result in results]
+    order_by = lambda configs : [config.order for config in configs]
     configs, names = handle_json.load_jsons(args.config_folder_name, order_by=order_by)
 
     for i in range(0, len(configs)):

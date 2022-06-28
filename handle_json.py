@@ -22,7 +22,6 @@ def load_jsons(folder, order_by=None):
         objs.append(json_file_to_obj(join(folder, json_file)))
 
     if order_by is not None:
-        print(order_by)
         indices = sorted(range(len(objs)), key=order_by(objs).__getitem__)
         objs[:] = [objs[i] for i in indices]
         json_file_names[:] = [json_file_names[i] for i in indices]
