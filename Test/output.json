@@ -1,5 +1,7 @@
 {
   "config": {
+    "name": "Test",
+    "order": 1,
     "seed": 1,
     "batch_size": 32,
     "learning_rate": 0.0005,
@@ -26,97 +28,97 @@
     ],
     "model_path": "model.pth"
   },
-  "time": "Tue Jun 28 15:58:18 2022",
+  "time": "Wed Jun 29 11:30:51 2022",
   "epochs": [
     {
       "loss": 1.0112502574920654,
       "validation_loss": 0.6870102286338806,
       "learning_rate": 0.0005,
-      "time_taken": 3.346728563308716
+      "time_taken": 3.1997156143188477
     },
     {
       "loss": 1.022890567779541,
       "validation_loss": 0.6911765336990356,
       "learning_rate": 0.0005,
-      "time_taken": 0.9668831825256348
+      "time_taken": 0.8868246078491211
     },
     {
       "loss": 0.8845251798629761,
       "validation_loss": 0.6984041333198547,
       "learning_rate": 0.0005,
-      "time_taken": 0.981583833694458
+      "time_taken": 0.8808894157409668
     },
     {
       "loss": 1.0508705377578735,
       "validation_loss": 0.6940271854400635,
       "learning_rate": 0.0005,
-      "time_taken": 0.9733180999755859
+      "time_taken": 0.8932182788848877
     },
     {
       "loss": 1.271305799484253,
       "validation_loss": 0.6897450089454651,
       "learning_rate": 0.0005,
-      "time_taken": 0.9622938632965088
+      "time_taken": 0.879615068435669
     },
     {
       "loss": 0.9719905257225037,
       "validation_loss": 0.687504768371582,
       "learning_rate": 0.0005,
-      "time_taken": 0.9729769229888916
+      "time_taken": 0.8866515159606934
     },
     {
       "loss": 0.9914538860321045,
       "validation_loss": 0.6851942539215088,
       "learning_rate": 0.0005,
-      "time_taken": 0.961604118347168
+      "time_taken": 0.8881142139434814
     },
     {
       "loss": 0.965831995010376,
       "validation_loss": 0.6810438632965088,
       "learning_rate": 0.0005,
-      "time_taken": 0.9763083457946777
+      "time_taken": 0.8833432197570801
     },
     {
       "loss": 0.9182835221290588,
       "validation_loss": 0.6806754469871521,
       "learning_rate": 0.0005,
-      "time_taken": 0.97225022315979
+      "time_taken": 0.8874349594116211
     },
     {
       "loss": 0.9671517610549927,
       "validation_loss": 0.6814010143280029,
       "learning_rate": 0.0005,
-      "time_taken": 0.9751746654510498
+      "time_taken": 0.8891181945800781
     },
     {
       "loss": 1.014646291732788,
       "validation_loss": 0.6855388879776001,
       "learning_rate": 0.0005,
-      "time_taken": 0.960822343826294
+      "time_taken": 0.8705246448516846
     },
     {
       "loss": 1.0510953664779663,
       "validation_loss": 0.6903443932533264,
       "learning_rate": 0.0005,
-      "time_taken": 0.9392833709716797
+      "time_taken": 0.9732775688171387
     },
     {
       "loss": 0.9400646686553955,
       "validation_loss": 0.6937288045883179,
       "learning_rate": 0.0005,
-      "time_taken": 0.9450562000274658
+      "time_taken": 1.010890007019043
     },
     {
       "loss": 0.9658969640731812,
       "validation_loss": 0.6915477514266968,
       "learning_rate": 0.0005,
-      "time_taken": 0.9251198768615723
+      "time_taken": 0.883821964263916
     },
     {
       "loss": 1.0251182317733765,
       "validation_loss": 0.6913866400718689,
       "learning_rate": 0.0005,
-      "time_taken": 0.9255540370941162
+      "time_taken": 0.9730098247528076
     }
   ],
   "confusion_matrix": [
@@ -128,6 +130,5 @@
       4,
       4
     ]
-  ],
-  "name": null
+  ]
 }

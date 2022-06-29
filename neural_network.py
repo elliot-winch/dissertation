@@ -123,7 +123,7 @@ class NeuralNetwork(object):
             self.output.epochs.append(epoch_output)
 
             #TODO: might be worth writing an Event class
-            [f() for f in self.on_epoch_finished]
+            [f(self) for f in self.on_epoch_finished]
 
             if self.cancel:
                 break

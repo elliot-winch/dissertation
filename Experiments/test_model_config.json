@@ -1,4 +1,6 @@
 {
+  "name" : "Test",
+  "order" : 1,
   "seed" : 1,
   "batch_size" : 32,
   "learning_rate" : 5e-4,
