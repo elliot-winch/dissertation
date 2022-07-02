@@ -41,24 +41,19 @@ class NeuralNetwork(object):
     epoch_finished_sound_data = [440, 400]
     training_finished_sound_data = [880, 3000]
 
-    config = None
-    device = None
-    model = None
-    architecture_data = None
-
-    cancel = False
-    finished_training = False
-
-    on_epoch_finished = []
-
-    output = NeuralNetworkOutput()
-
     def __init__(self, config):
         super(NeuralNetwork, self).__init__()
         self.config = config
+        self.output = NeuralNetworkOutput()
         self.output.config = config
         self.output.time = time.ctime()
+
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.model = None
+        self.architecture_data = None
+        self.cancel = False
+        self.finished_training = False
+        self.on_epoch_finished = []
 
     def get_num_classes(self):
         return len(self.config.classes)
@@ -85,7 +80,6 @@ class NeuralNetwork(object):
             path = self.config.sorted_data_dir + '/train',
             image_transform = image_transform,
             batch_size = self.config.batch_size,
-            use_sampling = True,
             class_balance = class_balance
         )
 
@@ -167,16 +161,16 @@ class NeuralNetwork(object):
         loss = loss_sum / train_num_batches
         validation_loss = val_loss_sum / val_num_batches
 
-        if scheduler is not None:
-            scheduler.step(validation_loss)
-
-        time_taken = time.time() - start_time
-        print("\nEpoch time (minutes): " + str(time_taken / 60))
+        learning_rate_scheduler.step_scheduler(scheduler,self.config, validation_loss)
 
         epoch_output = EpochOutput()
         epoch_output.loss = loss
         epoch_output.validation_loss = validation_loss
         epoch_output.learning_rate = optimizer.param_groups[0]['lr']
+        epoch_output.confusion_matrix = self.confusion_matrix(val_dataloader)
+
+        time_taken = time.time() - start_time
+        print("\nEpoch time (minutes): " + str(time_taken / 60))
         epoch_output.time_taken = time_taken
 
         return epoch_output
@@ -223,40 +217,38 @@ class NeuralNetwork(object):
         self.init_model(load=True);
 
         image_transform = handle_dataloader.default_image_transform(self.architecture_data.image_size)
-        train_dataloader = handle_dataloader.create_dataloader(
+        test_dataloader = handle_dataloader.create_dataloader(
             path = self.config.sorted_data_dir + '/test',
             image_transform = image_transform,
             batch_size = self.config.batch_size
         )
 
-        self.test(train_dataloader)
+        self.output.confusion_matrix = self.confusion_matrix(test_dataloader)
 
-    def test(self, test_dataloader):
+    def confusion_matrix(self, dataloader):
+        pred = []
+        true = []
 
-        self.init_model(load=True)
-
-        y_pred = []
-        y_true = []
-
-        # iterate over test data
-        for inputs, labels in test_dataloader:
-
-            inputs, labels = inputs.to(self.device), labels.to(self.device) # Send data to C/GPU
-
-            output = self.model(inputs) # Feed Network
-
+        for inputs, labels in dataloader:
+            # Send data to C/GPU
+            inputs, labels = inputs.to(self.device), labels.to(self.device)
+            # Feed Network
+            output = self.model(inputs)
+            #Converts prediction scores into class predictions
             output = (torch.max(torch.exp(output), 1)[1]).data.cpu().numpy()
-            y_pred.extend(output) # Save Prediction
-
+            # Save Prediction
+            pred.extend(output)
+            # Save labels
             labels = labels.data.cpu().numpy()
-            y_true.extend(labels) # Save Truth
+            true.extend(labels)
 
-        confusion_matrix = [ [0]*self.get_num_classes() for i in range(self.get_num_classes())]
+        num_classes = self.get_num_classes()
+        confusion_matrix = [ [0]*num_classes for i in range(num_classes)]
 
-        for i in range(len(y_true)):
-            confusion_matrix[y_true[i]][y_pred[i]] += 1
+        for i in range(num_classes):
+            confusion_matrix[true[i]][pred[i]] += 1
 
-        self.output.confusion_matrix = confusion_matrix
+        return confusion_matrix
 
     def init_model(self, load=False):
         #Loads model from file if it's not already in memory

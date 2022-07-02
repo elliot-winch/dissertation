@@ -3,6 +3,9 @@ import argparse
 import train_model
 import handle_json
 
+import time
+from os.path import splitext
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
@@ -13,9 +16,11 @@ if __name__ == '__main__':
     order_by = lambda configs : [config.order for config in configs]
     configs, names = handle_json.load_jsons(args.config_folder_name, order_by=order_by)
 
+    timestr = time.strftime("%m%d%H%M")
+
     for i in range(0, len(configs)):
-        output_file = "{}_{}/{}".format(i, args.output_folder_name, names[i])
+        output_file = "{}_{}/{}".format(args.output_folder_name, timestr, names[i])
+
         print("Running training for {}".format(output_file))
-        output = train_model.train_model(configs[i])
-        output.name = names[i]
-        handle_json.obj_to_json_file(output, output_file)
+
+        train_model.train_model(configs[i], output_file)

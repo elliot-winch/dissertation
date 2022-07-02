@@ -1,6 +1,6 @@
 {
   "name" : "Test",
-  "order" : 1,
+  "order" : 2,
   "seed" : 1,
   "batch_size" : 32,
   "learning_rate" : 5e-4,
@@ -11,7 +11,7 @@
   "model_name": "inception",
   "use_transfer_learning" : true,
   "use_pretrained" : true,
-  "loss_function_class_weights" : [1,1],
+  "loss_function_class_weights" : [10,1],
   "learning_rate_scheduler" : "ExponentialLR",
   "learning_rate_gamma" : 0.5,
 

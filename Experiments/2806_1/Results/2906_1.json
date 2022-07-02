@@ -1,0 +1,107 @@
+{
+  "config": {
+    "seed": 100,
+    "batch_size": 32,
+    "learning_rate": 0.005,
+    "momentum": 0.5,
+    "epochs": 25,
+    "train_prop": 0.85,
+    "val_prop": 0.1,
+    "model_name": "inception",
+    "use_transfer_learning": true,
+    "use_pretrained": true,
+    "loss_function_class_weights": [
+      10,
+      1
+    ],
+    "order": 1,
+    "learning_rate_scheduler": "ReduceLROnPlateau",
+    "learning_rate_patience": 5,
+    "data_dir": "none",
+    "sorted_data_dir": "sorted_data",
+    "classes": [
+      "Failure",
+      "Success"
+    ],
+    "model_path": "model.pth"
+  },
+  "time": "Wed Jun 29 11:37:17 2022",
+  "epochs": [
+    {
+      "loss": 1.019437087729653,
+      "validation_loss": 0.6720996769991788,
+      "learning_rate": 0.005,
+      "time_taken": 150.0801362991333
+    },
+    {
+      "loss": 0.9990697327782126,
+      "validation_loss": 0.7135129191658713,
+      "learning_rate": 0.005,
+      "time_taken": 133.01623225212097
+    },
+    {
+      "loss": 0.9796047443374593,
+      "validation_loss": 0.6684779578989203,
+      "learning_rate": 0.005,
+      "time_taken": 132.61112356185913
+    },
+    {
+      "loss": 0.9899533999794945,
+      "validation_loss": 0.6587050557136536,
+      "learning_rate": 0.005,
+      "time_taken": 133.42969250679016
+    },
+    {
+      "loss": 0.9618982242390434,
+      "validation_loss": 0.6607409227978099,
+      "learning_rate": 0.005,
+      "time_taken": 132.63512206077576
+    },
+    {
+      "loss": 0.9671583127847967,
+      "validation_loss": 0.7432488040490584,
+      "learning_rate": 0.005,
+      "time_taken": 132.8167462348938
+    },
+    {
+      "loss": 0.9600347497246482,
+      "validation_loss": 0.6650798971002753,
+      "learning_rate": 0.005,
+      "time_taken": 132.62198758125305
+    },
+    {
+      "loss": 0.9675699169623023,
+      "validation_loss": 0.6940783858299255,
+      "learning_rate": 0.005,
+      "time_taken": 132.60934233665466
+    },
+    {
+      "loss": 0.9551711570132863,
+      "validation_loss": 0.651166173544797,
+      "learning_rate": 0.005,
+      "time_taken": 132.78023767471313
+    },
+    {
+      "loss": 0.9471533416426755,
+      "validation_loss": 0.9311065755107186,
+      "learning_rate": 0.005,
+      "time_taken": 132.62611961364746
+    },
+    {
+      "loss": 0.9686530944816569,
+      "validation_loss": 0.6866593767296184,
+      "learning_rate": 0.005,
+      "time_taken": 134.61018562316895
+    }
+  ],
+  "confusion_matrix": [
+    [
+      5,
+      27
+    ],
+    [
+      53,
+      243
+    ]
+  ]
+}

@@ -16,12 +16,12 @@ def default_image_transform(image_size):
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
 
-def create_dataloader(path, image_transform, batch_size=16, use_sampling=False, class_balance=None):
+def create_dataloader(path, image_transform, batch_size=16, class_balance=None):
 
     dataset = datasets.ImageFolder(path, transform=image_transform)
     generator = torch.Generator()
 
-    if use_sampling and class_balance is not None:
+    if class_balance is not None:
         class_count = get_class_count(dataset)
 
         #Class with the most examples

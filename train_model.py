@@ -11,8 +11,8 @@ def train_model(config, output_file):
     neural_network = NeuralNetwork(config)
 
     loss_graph = plot_loss.PlotLoss()
-    loss_graph.set_epoch_count(config.epochs)
     loss_graph.show()
+    loss_graph.set_epoch_count(config.epochs)
 
     #TODO: might be worth writing a Event class
     neural_network.on_epoch_finished.append(lambda nn: plot_during_training(nn, loss_graph))
@@ -47,7 +47,7 @@ def check_cancel(neural_network):
             time.sleep(1)
 
 def plot_during_training(neural_network, loss_graph):
-    loss_graph.plot_loss('Current', neural_network.output.epochs, plot_learning_rate=True)
+    loss_graph.plot_loss('Current', neural_network.output.epochs)
 
 def save_output(neural_network, output_file):
     handle_json.obj_to_json_file(neural_network.output, output_file)

@@ -1,8 +1,8 @@
 import json
 from types import SimpleNamespace
 
-from os import listdir
-from os.path import isfile, join, dirname
+from os import listdir, makedirs
+from os.path import isfile, join, dirname, exists
 import pathlib
 
 json_extension = ".json"
@@ -13,12 +13,13 @@ def json_file_to_obj(file_name):
 
 def obj_to_json_file(object, file_name):
     #Ensure folder exists before writing
-    dir = pathlib.Path(dirname(file_name))
-    if dir.is_dir() is False:
-        dir.mkdir(parents=True, exist_ok=True)
+    directory = pathlib.Path(dirname(file_name))
+    if not exists(directory):
+        makedirs(directory)
 
     with open(file_name, "w") as file:
             json.dump(object.__dict__, file, indent=2, default=lambda o: getattr(o, '__dict__', str(o)))
+
 
 def load_jsons(folder, order_by=None):
     json_file_names = [f for f in listdir(folder) if isfile(join(folder, f)) and f.endswith(json_extension)]

@@ -1,7 +1,7 @@
 {
-  "seed" : 100,
+  "seed" : 1,
   "batch_size" : 32,
-  "learning_rate" : 5e-3,
+  "learning_rate" : 1e-3,
   "momentum" : 0.5,
   "epochs" : 25,
   "train_prop" : 0.85,
