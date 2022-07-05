@@ -1,0 +1,94 @@
+{
+  "config": {
+    "name": "Exponential LR",
+    "order": 1,
+    "seed": 1,
+    "batch_size": 32,
+    "learning_rate": 0.001,
+    "momentum": 0.5,
+    "epochs": 15,
+    "train_prop": 0.85,
+    "val_prop": 0.1,
+    "model_name": "inception",
+    "use_transfer_learning": true,
+    "use_pretrained": true,
+    "loss_function_class_weights": [
+      10,
+      1
+    ],
+    "learning_rate_scheduler": "ExponentialLR",
+    "learning_rate_gamma": 0.9,
+    "data_dir": "none",
+    "sorted_data_dir": "sorted_data",
+    "classes": [
+      "Failure",
+      "Success"
+    ],
+    "class_balance": [
+      1,
+      1
+    ],
+    "model_path": "model.pth"
+  },
+  "time": "Sat Jul  2 15:24:21 2022",
+  "epochs": [
+    {
+      "loss": 0.45745865495155696,
+      "validation_loss": 1.0996443575078791,
+      "learning_rate": 0.0009000000000000001,
+      "confusion_matrix": [
+        [
+          0,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "time_taken": 241.54946208000183
+    },
+    {
+      "loss": 0.45354642633315734,
+      "validation_loss": 1.148654493418607,
+      "learning_rate": 0.0008100000000000001,
+      "confusion_matrix": [
+        [
+          0,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "time_taken": 241.71586298942566
+    },
+    {
+      "loss": 0.4397168024099682,
+      "validation_loss": 1.083658521825617,
+      "learning_rate": 0.000729,
+      "confusion_matrix": [
+        [
+          0,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "time_taken": 241.68869471549988
+    }
+  ],
+  "confusion_matrix": [
+    [
+      0,
+      0
+    ],
+    [
+      2,
+      0
+    ]
+  ]
+}

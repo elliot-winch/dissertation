@@ -1,0 +1,22 @@
+{
+  "name" : "Exponential LR",
+  "order" : 2,
+  "seed" : 1,
+  "batch_size" : 64,
+  "learning_rate" : 1e-3,
+  "momentum" : 0.5,
+  "epochs" : 15,
+  "train_prop" : 0.85,
+  "val_prop" : 0.10,
+  "model_name": "inception",
+  "use_transfer_learning" : true,
+  "use_pretrained" : true,
+  "loss_function_class_weights" : [10,1],
+  "learning_rate_scheduler" : "ExponentialLR",
+  "learning_rate_gamma" : 0.1,
+
+  "data_dir" : "none",
+  "sorted_data_dir" : "sorted_data",
+  "classes" : [ "Failure", "Success" ],
+  "model_path" : "model.pth"
+}

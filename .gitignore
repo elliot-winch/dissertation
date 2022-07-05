@@ -1,3 +1,6 @@
 *.png
 *.pyc
 *.pth
+
+!FeatureExtraction/Templates/Left_Template.png
+!FeatureExtraction/Templates/Right_Template.png

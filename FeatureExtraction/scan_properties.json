@@ -1,0 +1,16 @@
+{
+  "properties" : [
+    {
+      "name" : "retinal_detachment",
+      "min_color" : [255, 0, 0],
+      "max_color" : [255, 0, 0],
+      "max_count" : 2
+    },
+    {
+      "name" : "horseshoe_tears",
+      "min_color" : [0, 0, 255],
+      "max_color" : [0, 0, 255],
+      "max_count" : 8
+    }
+  ]
+}

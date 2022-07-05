@@ -61,7 +61,7 @@ class NeuralNetwork(object):
     def train_from_config(self):
 
         #Experiment: setting num threads to 1
-        torch.set_num_threads(1)
+        #torch.set_num_threads(1)
 
         #Set the seed
         torch.manual_seed(self.config.seed)
@@ -245,7 +245,7 @@ class NeuralNetwork(object):
         num_classes = self.get_num_classes()
         confusion_matrix = [ [0]*num_classes for i in range(num_classes)]
 
-        for i in range(num_classes):
+        for i in range(len(true)):
             confusion_matrix[true[i]][pred[i]] += 1
 
         return confusion_matrix
