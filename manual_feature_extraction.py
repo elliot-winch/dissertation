@@ -6,8 +6,8 @@ import argparse
 from os import listdir, makedirs
 from os.path import isfile, join, dirname, exists
 
+from types import SimpleNamespace
 import handle_json
-from empty_object import EmptyObject
 
 
 image_center = [199.5, 199.5]
@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
     property_dictionary = handle_json.json_file_to_obj('FeatureExtraction/scan_properties.json')
 
-    feature_vectors = EmptyObject()
+    feature_vectors = SimpleNamespace()
     feature_vectors.scan_features = []
 
     #temp: debugging
