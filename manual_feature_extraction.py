@@ -15,9 +15,7 @@ image_center = [199.5, 199.5]
 #property_image: greyscale image of single property (e.g. horseshoe tears)
 def get_property_info(property_image, max_property_count=8):
 
-
     cv2.imshow('property_image', property_image)
-    cv2.waitKey(0)
 
     num_labels, component_labeled_image, stats, centroids = cv2.connectedComponentsWithStats(property_image)
 
@@ -27,7 +25,7 @@ def get_property_info(property_image, max_property_count=8):
     for i in range(1, min(num_labels, max_property_count)):
         component_image = cv2.inRange(component_labeled_image, i, i)
 
-        property_info = EmptyObject()
+        property_info = SimpleNamespace()
         property_info.size = stats[i, cv2.CC_STAT_AREA]
         # can also access width and height from stats if needed
 
@@ -47,8 +45,7 @@ def get_property_info(property_image, max_property_count=8):
 
         #TEMP debugging
         print("Property info {}: size {} distance {} angle {} rotation {} hu {}".format(i, property_info.size, property_info.distance, angle, property_info.rotation, property_info.hu_moments))
-        cv2.imshow('image',component_image)
-        cv2.waitKey(0)
+        cv2.imshow('Single property image {}'.format(i),component_image)
 
     return properties_info
 
@@ -66,7 +63,6 @@ def get_feature_vector(scan, property_dictionary):
         feature_vector.append(get_property_info(prop_image))
 
     #TODO: build feature vector
-    print(feature_vector)
     return feature_vector
 
 #TODO if main: given input folder, create JSON with all feature vectors
@@ -75,15 +71,17 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--image_folder_name", help="path to read images")
+    parser.add_argument("-l", "--label_file_name", help="path to left / right label json file")
     parser.add_argument("-o", "--output_file_name", help="path to write output json file")
     args = parser.parse_args()
 
-    png_file_names = [join(args.image_folder_name, f) for f in listdir(args.image_folder_name) if isfile(join(args.image_folder_name, f)) and f.endswith('.png')]
+    png_file_names = [f for f in listdir(args.image_folder_name) if isfile(join(args.image_folder_name, f)) and f.endswith('.png')]
 
-    #TODO: create l/r labels elsewhere
-    #TODO: load l/r labels
-    left_template = cv2.imread('FeatureExtraction/Templates/Left_Template.png')
-    right_template = cv2.imread('FeatureExtraction/Templates/Right_Template.png')
+    #load l/r labels
+    labels = handle_json.json_file_to_obj(args.label_file_name)
+    #Load template images
+    for template in labels.templates:
+        template.image = cv2.imread(template.file_name)
 
     property_dictionary = handle_json.json_file_to_obj('FeatureExtraction/scan_properties.json')
 
@@ -91,19 +89,22 @@ if __name__ == '__main__':
     feature_vectors.scan_features = []
 
     #temp: debugging
-    max_files = 2
+    max_files = 8
     for i in range(min(max_files, len(png_file_names))):
 
-        print(png_file_names[i])
-        scan_image = cv2.imread(png_file_names[i])
+        scan_image = cv2.imread(join(args.image_folder_name, png_file_names[i]))
 
-        #TODO: choose correct template
-        scan_image = cv2.subtract(scan_image, left_template)
+        #Remove correct left / right template from image
+        label = next(label.label for label in labels.labels if label.file_name == png_file_names[i])
+        template = next(template.image for template in labels.templates if template.label == label)
+        scan_image = cv2.subtract(scan_image, template)
+        #todo: infill missing areas
 
         cv2.imshow('Scan_image {}'.format(i),scan_image)
-        cv2.waitKey(0)
 
         feature_vectors.scan_features.append(get_feature_vector(scan_image, property_dictionary))
 
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
     handle_json.obj_to_json_file(feature_vectors, args.output_file_name)
-    cv2.destroyAllWindows()
