@@ -8,6 +8,7 @@ from os.path import isfile, join, dirname, exists
 
 from types import SimpleNamespace
 import handle_json
+from progress_bar import log_progress_bar
 
 #todo: calculate
 image_center = [199.5, 199.5]
@@ -15,7 +16,7 @@ image_center = [199.5, 199.5]
 min_size = 100
 
 #property_image: greyscale image of single property (e.g. horseshoe tears)
-def get_property_info(property_image, property):
+def get_features_for_property(property_image, property):
     num_labels, component_labeled_image, stats, centroids = cv2.connectedComponentsWithStats(property_image)
 
     properties_info = []
@@ -43,17 +44,12 @@ def get_property_info(property_image, property):
 
         moments = cv2.moments(component_image)
 
-        #TODO: fix
         hu_moments = cv2.HuMoments(moments).tolist()
         #flatten array
         hu_moments = [x for xs in hu_moments for x in xs]
         property_info.hu_moments = hu_moments
 
         properties_info.append(property_info)
-
-        #TEMP debugging
-        #print("Property info {}: size {} distance {} angle {} rotation {} hu {}".format(i, property_info.size, property_info.distance, angle, property_info.rotation, property_info.hu_moments))
-        #cv2.imshow('Single property image {}'.format(i),component_image)
 
     #Only consider largest N features
     order_by = lambda prop : prop.size
@@ -64,20 +60,18 @@ def get_property_info(property_image, property):
 
 
 def get_feature_vector(scan, properties):
-    feature_vector = []
+    properties_object = []
+
     for property in properties:
+        property_object = SimpleNamespace()
+        property_object.name = property.name
+
         prop_image = cv2.inRange(scan, np.array(property.color), np.array(property.color))
-        #_, prop_image = cv2.threshold(prop_image, 1, 255, cv2.THRESH_BINARY)
+        property_object.features = get_features_for_property(prop_image, property)
+        properties_object.append(property_object)
 
-        feature_vector.append(get_property_info(prop_image, property))
+    return properties_object
 
-        #scan = remove_property(scan, prop_image)
-        #cv2.imshow('scan after {}'.format(property.name), scan)
-
-    #TODO: build feature vector
-    return feature_vector
-
-#TODO if main: given input folder, create JSON with all feature vectors
 
 if __name__ == '__main__':
 
@@ -102,8 +96,9 @@ if __name__ == '__main__':
 
     #init output
     feature_vectors = SimpleNamespace()
-    feature_vectors.scan_features = []
+    feature_vectors.scans = []
 
+    log_progress_bar(0)
     for i in range(len(png_file_names)):
 
         image_feature = SimpleNamespace()
@@ -121,14 +116,10 @@ if __name__ == '__main__':
         #in fill the removed template
         scan_image = cv2.inpaint(scan_image, template[:,:,2], 3, cv2.INPAINT_NS)
 
-        #scan_image = cv2.cvtColor(scan_image, cv2.COLOR_BGR2HSV)
+        image_feature.properties = get_feature_vector(scan_image, properties)
+        feature_vectors.scans.append(image_feature)
+        log_progress_bar(float(i) / len(png_file_names))
 
-        #cv2.imshow('Scan_image {}'.format(i),scan_image)
 
-        image_feature.features = get_feature_vector(scan_image, properties)
-        feature_vectors.scan_features.append(image_feature)
-
-        #cv2.waitKey(0)
-        #cv2.destroyAllWindows()
-
+    log_progress_bar(1)
     handle_json.obj_to_json_file(feature_vectors, args.output_file_name)

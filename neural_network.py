@@ -23,6 +23,7 @@ from architecture import initialize_model, get_architecture_data
 from progress_bar import log_progress_bar
 import handle_dataloader
 import learning_rate_scheduler
+from confusion_matrix import get_confusion_matrx
 
 class NeuralNetworkOutput(object):
     pass
@@ -243,12 +244,7 @@ class NeuralNetwork(object):
             true.extend(labels)
 
         num_classes = self.get_num_classes()
-        confusion_matrix = [ [0]*num_classes for i in range(num_classes)]
-
-        for i in range(len(true)):
-            confusion_matrix[true[i]][pred[i]] += 1
-
-        return confusion_matrix
+        return get_confusion_matrx(true, pred, num_classes)
 
     def init_model(self, load=False):
         #Loads model from file if it's not already in memory

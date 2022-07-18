@@ -36,6 +36,10 @@ files = {
     },
 }
 
+def get_result_from_file_name(file_name):
+    #remove file type then get result
+    return file_name.split('.')[0].split('_')[4]
+
 def arrange_files(config):
 
     if os.path.exists(config.data_dir) is False:
@@ -55,8 +59,7 @@ def arrange_files(config):
 
 def sort_file(config, file_names, index):
     file_name = file_names[index]
-    #From Convention - remove file type then get result
-    result = file_name.split('.')[0].split('_')[4]
+    result = get_result_from_file_name(file_name)
 
     if result not in config.classes:
         return

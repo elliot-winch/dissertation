@@ -1,0 +1,78 @@
+{
+  "templates": [
+    {
+      "label": "Left",
+      "file_name": "FeatureExtraction/Templates/Left_Template.png"
+    },
+    {
+      "label": "Right",
+      "file_name": "FeatureExtraction/Templates/Right_Template.png"
+    }
+  ],
+  "labels": [
+    {
+      "file_name": "01e767ed-fa59-6c69-0af1-00001a15360b_Male_52_PC-IOL_Success.png",
+      "label": "Left"
+    },
+    {
+      "file_name": "04f2ab4b-ba08-436a-9d39-7598fb72efd6_Female_65_Phakic_Failure.png",
+      "label": "Right"
+    },
+    {
+      "file_name": "0a4eaf52-a75f-5a68-8a9e-0000696e2447_Male_72_Phakic_Success.png",
+      "label": "Left"
+    },
+    {
+      "file_name": "0c452ca2-256c-4217-8799-7aaa8a2ddd3d_Female_57_Phakic_Success.png",
+      "label": "Left"
+    },
+    {
+      "file_name": "0cf1b577-cf91-14c8-5ba1-00006d7b3765_Male_60_Phakic_Success.png",
+      "label": "Right"
+    },
+    {
+      "file_name": "0df1a0d1-0002-49e8-72b8-00003ea19560_Male_71_Phakic_Success.png",
+      "label": "Right"
+    },
+    {
+      "file_name": "0f47f62c-ab3f-baa8-1b68-000076f9f0cc_Male_42_Phakic_Success.png",
+      "label": "Left"
+    },
+    {
+      "file_name": "0f91bd74-6e2d-4f5d-9b50-5a765f1e9602_Male_49_Phakic_Success.png",
+      "label": "Left"
+    },
+    {
+      "file_name": "1a1f0728-12db-0f69-f308-000078612f23_Male_64_Phakic_Success.png",
+      "label": "Right"
+    },
+    {
+      "file_name": "2ac65e3c-c84f-7029-db2e-00000b0c33b8_Male_58_Phakic_Failure.png",
+      "label": "Left"
+    },
+    {
+      "file_name": "2b0834c9-3dbc-7ec9-8218-000036410da3_Female_69_Phakic_Failure.png",
+      "label": "Right"
+    },
+    {
+      "file_name": "2f3d65f2-7826-c5a8-8b9c-000013d33233_Male_68_Phakic_Failure.png",
+      "label": "Right"
+    },
+    {
+      "file_name": "4b0feb76-989a-455a-b6a8-daa6d1521737_Female_56_Phakic_Failure.png",
+      "label": "Right"
+    },
+    {
+      "file_name": "6f10de89-d9e7-489f-af53-3c051cfe30ff_Male_68_Phakic_Failure.png",
+      "label": "Left"
+    },
+    {
+      "file_name": "7c82e30a-c83e-05a8-4bb1-0000430dbf28_Female_47_PC-IOL_Failure.png",
+      "label": "Right"
+    },
+    {
+      "file_name": "7c9133b1-3c09-aac9-e201-00006823d1eb_Female_64_PC-IOL_Failure.png",
+      "label": "Right"
+    }
+  ]
+}
