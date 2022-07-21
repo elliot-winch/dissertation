@@ -13,75 +13,126 @@ import torch.optim as optim
 import argparse
 
 import handle_dataloader
+from progress_bar import log_progress_bar
 
 class Encoder(nn.Module):
 
-    def __init__(self, encoded_space_dim, input_size, num_input_channels):
+    def __init__(self, image_size, conv_layer_channels, linear_layer_sizes):
         super().__init__()
 
-        ### Convolutional section
-        self.encoder_cnn = nn.Sequential(
-            nn.Conv2d(num_input_channels, 8, 3, stride=2, padding=1),
-            nn.ReLU(True),
-            nn.Conv2d(8, 16, 3, stride=2, padding=1),
-            nn.BatchNorm2d(16),
-            nn.ReLU(True),
-            nn.Conv2d(16, 32, 3, stride=2, padding=0),
-            nn.ReLU(True)
-        )
+        #Maybe have parameterisable padding / stride / kernel_size
+        kernel_size = 3
+        padding = 1
+        stride = 2
 
-        ### Flatten layer
+        image_sizes = cnn_image_sizes(image_size, len(conv_layer_channels), kernel_size, padding, stride)
+
+        ### Convolutional layers
+        cnn_modules = []
+        for i in range(1, len(conv_layer_channels)):
+            cnn_modules.append(
+                nn.Sequential(
+                    nn.Conv2d(conv_layer_channels[i - 1],
+                              out_channels=conv_layer_channels[i],
+                              kernel_size = kernel_size,
+                              stride = stride,
+                              padding = padding),
+                    nn.BatchNorm2d(conv_layer_channels[i]),
+                    nn.LeakyReLU())
+            )
+
+        self.cnn = nn.Sequential(*cnn_modules)
+
+        # Flatten layer
         self.flatten = nn.Flatten(start_dim=1)
-        ### Linear section\\|
-        self.encoder_lin = nn.Sequential(
-            #Specific to 400x400 pixel images!
-            nn.Linear(49 * 49 * 32, 128),
-            nn.ReLU(True),
-            nn.Linear(128, encoded_space_dim)
-        )
+
+        # Linear layers
+        linear_modules = []
+        first_linear_layer_size = image_sizes[-1] * image_sizes[-1] * conv_layer_channels[-1]
+        linear_layer_sizes.insert(0, first_linear_layer_size)
+
+        for i in range(1, len(linear_layer_sizes)):
+            linear_modules.append(nn.Sequential(
+                nn.Linear(linear_layer_sizes[i - 1], linear_layer_sizes[i]),
+                nn.ReLU(True)
+            ))
+
+        self.lin = nn.Sequential(*linear_modules)
 
     def forward(self, x):
-        x = self.encoder_cnn(x)
+        x = self.cnn(x)
         x = self.flatten(x)
-        x = self.encoder_lin(x)
+        x = self.lin(x)
         return x
-
 
 class Decoder(nn.Module):
 
-    def __init__(self, encoded_space_dim, input_size, num_input_channels):
+    #Same input as the encoder for simplicity - channels need to be reversed
+    #Reversing the input makes the cnn_image_sizes calculation messy as it would
+    #require reversing reversed list.
+    def __init__(self, image_size, conv_layer_channels, linear_layer_sizes):
         super().__init__()
-        self.decoder_lin = nn.Sequential(
-            nn.Linear(encoded_space_dim, 128),
-            nn.ReLU(True),
-            #Specific to 400x400 pixel images!
-            nn.Linear(128, 49 * 49 * 32),
-            nn.ReLU(True)
-        )
 
-        self.unflatten = nn.Unflatten(dim=1,
-        unflattened_size=(32, 49, 49))
+        #Maybe have parameterisable padding / stride / kernel_size
+        kernel_size = 3
+        padding = 1
+        stride = 2
 
-        self.decoder_conv = nn.Sequential(
-            nn.ConvTranspose2d(32, 16, 3, stride=2, padding=0, output_padding=0),
-            nn.BatchNorm2d(16),
-            nn.ReLU(True),
-            nn.ConvTranspose2d(16, 8, 3, stride=2, padding=0, output_padding=0),
-            nn.BatchNorm2d(8),
-            nn.ReLU(True),
-            nn.ConvTranspose2d(8, num_input_channels, 3, stride=2, padding=0, output_padding=1)
-        )
+        image_sizes = cnn_image_sizes(image_size, len(conv_layer_channels), kernel_size, padding, stride)
+
+        # 1 - Linear layers
+        linear_modules = []
+        first_linear_layer_size = image_sizes[-1] * image_sizes[-1] * conv_layer_channels[-1]
+        linear_layer_sizes.insert(0, first_linear_layer_size)
+
+        linear_layer_sizes.reverse()
+        for i in range(1, len(linear_layer_sizes)):
+            linear_modules.append(nn.Sequential(
+                nn.Linear(linear_layer_sizes[i - 1], linear_layer_sizes[i]),
+                nn.ReLU(True)
+            ))
+
+        self.lin = nn.Sequential(*linear_modules)
+
+        # 2 - Flatten layer
+        self.unflatten = nn.Unflatten(dim=1, unflattened_size=(conv_layer_channels[-1], image_sizes[-1], image_sizes[-1]))
+
+        ### 3 - Convolutional layers
+        cnn_modules = []
+        conv_layer_channels.reverse()
+        for i in range(1, len(conv_layer_channels)):
+            cnn_modules.append(
+                nn.Sequential(
+                    nn.ConvTranspose2d(conv_layer_channels[i - 1],
+                              out_channels=conv_layer_channels[i],
+                              kernel_size = kernel_size,
+                              stride = stride,
+                              padding = padding,
+                              output_padding = 1),
+                    nn.BatchNorm2d(conv_layer_channels[i]),
+                    nn.LeakyReLU())
+            )
+
+        self.cnn = nn.Sequential(*cnn_modules)
 
     def forward(self, x):
-        x = self.decoder_lin(x)
+        x = self.lin(x)
         x = self.unflatten(x)
-        x = self.decoder_conv(x)
+        x = self.cnn(x)
         x = torch.sigmoid(x)
         return x
 
+#TODO: if needed, adapt for different kernel_size, padding, stride at different layers
+def cnn_image_sizes(image_size, num_layers, kernel_size, padding, stride):
+    image_sizes = []
+    for i in range(num_layers - 1):
+        image_size = int((image_size + padding - int(kernel_size / 2)) / stride)
+        image_sizes.append(image_size)
+
+    return image_sizes
+
 #Transform image tensor into matplotlib-displayable image
 def numpy_to_plt(image):
-    print(image.size())
     return np.transpose(image.cpu().detach().numpy(), (1, 2, 0))
 
 ### Training function
@@ -90,8 +141,14 @@ def train_epoch(encoder, decoder, device, dataloader, loss_fn, optimizer):
     encoder.train()
     decoder.train()
     train_loss = []
+
+    train_num_batches = float(len(dataloader))
     # Iterate the dataloader (we do not need the label values, this is unsupervised learning)
-    for image_batch, _ in dataloader: # with "_" we just ignore the labels (the second element of the dataloader tuple)
+    for i, data in enumerate(dataloader, 0):
+
+        log_progress_bar(i / train_num_batches)
+
+        image_batch, _ = data  # with "_" we just ignore the labels (the second element of the dataloader tuple)
         # Move tensor to the proper device
         image_batch = image_batch.to(device)
         # Encode data
@@ -105,9 +162,10 @@ def train_epoch(encoder, decoder, device, dataloader, loss_fn, optimizer):
         loss.backward()
         optimizer.step()
         # Print batch loss
-        print('\t partial train loss (single batch): %f' % (loss.data))
+        #print('\t partial train loss (single batch): %f' % (loss.data))
         train_loss.append(loss.detach().cpu().numpy())
 
+    log_progress_bar(1)
     return np.mean(train_loss)
 
 ### Testing function
@@ -174,14 +232,14 @@ if __name__ == "__main__":
     #parser.add_argument("-o", "--output_file_name", help="path to write output json file")
     args = parser.parse_args()
 
-    batch_size = 64
+    #todo: config file that allows for mutliple encoders
+    batch_size = 32
     lr = 0.001
-    encoded_space_dim = 10
     weight_decay = 1e-05
-    num_epochs = 3
-    input_size = 400
+    num_epochs = 10
+    image_size = 64
 
-    image_transform = handle_dataloader.default_image_transform(image_size=input_size)
+    image_transform = handle_dataloader.default_image_transform(image_size=image_size)
     train_loader = handle_dataloader.create_dataloader(args.image_folder + '/train', image_transform, batch_size = batch_size)
     val_loader = handle_dataloader.create_dataloader(args.image_folder + '/val', image_transform, batch_size = batch_size)
     test_loader = handle_dataloader.create_dataloader(args.image_folder + '/test', image_transform, batch_size = batch_size)
@@ -192,8 +250,8 @@ if __name__ == "__main__":
     ### Set the random seed for reproducible results
     torch.manual_seed(0)
 
-    encoder = Encoder(encoded_space_dim=encoded_space_dim, input_size=input_size, num_input_channels=3)
-    decoder = Decoder(encoded_space_dim=encoded_space_dim, input_size=input_size,num_input_channels=3)
+    encoder = Encoder(image_size, [3, 8, 16], [1000, 100])
+    decoder = Decoder(image_size, [3, 8, 16], [1000, 100])
     params_to_optimize = [
         {'params': encoder.parameters()},
         {'params': decoder.parameters()}
@@ -211,11 +269,15 @@ if __name__ == "__main__":
 
     diz_loss = {'train_loss':[],'val_loss':[]}
     for epoch in range(num_epochs):
-       train_loss = train_epoch(encoder, decoder, device,train_loader, loss_fn, optim)
-       val_loss = test_epoch(encoder, decoder, device, val_loader, loss_fn)
-       print('\n EPOCH {}/{} \t train loss {} \t val loss {}'.format(epoch + 1, num_epochs, train_loss, val_loss))
-       diz_loss['train_loss'].append(train_loss)
-       diz_loss['val_loss'].append(val_loss)
+        print("\nEpoch {}".format(epoch))
+        print("Training...")
+        train_loss = train_epoch(encoder, decoder, device,train_loader, loss_fn, optim)
+        print("\nTesting...")
+        val_loss = test_epoch(encoder, decoder, device, val_loader, loss_fn)
+        #print('\n EPOCH {}/{} \t train loss {} \t val loss {}'.format(epoch + 1, num_epochs, train_loss, val_loss))
+        diz_loss['train_loss'].append(train_loss)
+        diz_loss['val_loss'].append(val_loss)
+
 
     plot_ae_outputs(encoder, decoder, device, test_loader, n=10)
 
