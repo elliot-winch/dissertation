@@ -11,125 +11,14 @@ import torch.nn.functional as F
 import torch.optim as optim
 
 import argparse
+import time
+import os
+from types import SimpleNamespace
 
 import handle_dataloader
+import handle_json
 from progress_bar import log_progress_bar
-
-class Encoder(nn.Module):
-
-    def __init__(self, image_size, conv_layer_channels, linear_layer_sizes):
-        super().__init__()
-
-        #Maybe have parameterisable padding / stride / kernel_size
-        kernel_size = 3
-        padding = 1
-        stride = 2
-
-        image_sizes = cnn_image_sizes(image_size, len(conv_layer_channels), kernel_size, padding, stride)
-
-        ### Convolutional layers
-        cnn_modules = []
-        for i in range(1, len(conv_layer_channels)):
-            cnn_modules.append(
-                nn.Sequential(
-                    nn.Conv2d(conv_layer_channels[i - 1],
-                              out_channels=conv_layer_channels[i],
-                              kernel_size = kernel_size,
-                              stride = stride,
-                              padding = padding),
-                    nn.BatchNorm2d(conv_layer_channels[i]),
-                    nn.LeakyReLU())
-            )
-
-        self.cnn = nn.Sequential(*cnn_modules)
-
-        # Flatten layer
-        self.flatten = nn.Flatten(start_dim=1)
-
-        # Linear layers
-        linear_modules = []
-        first_linear_layer_size = image_sizes[-1] * image_sizes[-1] * conv_layer_channels[-1]
-        linear_layer_sizes.insert(0, first_linear_layer_size)
-
-        for i in range(1, len(linear_layer_sizes)):
-            linear_modules.append(nn.Sequential(
-                nn.Linear(linear_layer_sizes[i - 1], linear_layer_sizes[i]),
-                nn.ReLU(True)
-            ))
-
-        self.lin = nn.Sequential(*linear_modules)
-
-    def forward(self, x):
-        x = self.cnn(x)
-        x = self.flatten(x)
-        x = self.lin(x)
-        return x
-
-class Decoder(nn.Module):
-
-    #Same input as the encoder for simplicity - channels need to be reversed
-    #Reversing the input makes the cnn_image_sizes calculation messy as it would
-    #require reversing reversed list.
-    def __init__(self, image_size, conv_layer_channels, linear_layer_sizes):
-        super().__init__()
-
-        #Maybe have parameterisable padding / stride / kernel_size
-        kernel_size = 3
-        padding = 1
-        stride = 2
-
-        image_sizes = cnn_image_sizes(image_size, len(conv_layer_channels), kernel_size, padding, stride)
-
-        # 1 - Linear layers
-        linear_modules = []
-        first_linear_layer_size = image_sizes[-1] * image_sizes[-1] * conv_layer_channels[-1]
-        linear_layer_sizes.insert(0, first_linear_layer_size)
-
-        linear_layer_sizes.reverse()
-        for i in range(1, len(linear_layer_sizes)):
-            linear_modules.append(nn.Sequential(
-                nn.Linear(linear_layer_sizes[i - 1], linear_layer_sizes[i]),
-                nn.ReLU(True)
-            ))
-
-        self.lin = nn.Sequential(*linear_modules)
-
-        # 2 - Flatten layer
-        self.unflatten = nn.Unflatten(dim=1, unflattened_size=(conv_layer_channels[-1], image_sizes[-1], image_sizes[-1]))
-
-        ### 3 - Convolutional layers
-        cnn_modules = []
-        conv_layer_channels.reverse()
-        for i in range(1, len(conv_layer_channels)):
-            cnn_modules.append(
-                nn.Sequential(
-                    nn.ConvTranspose2d(conv_layer_channels[i - 1],
-                              out_channels=conv_layer_channels[i],
-                              kernel_size = kernel_size,
-                              stride = stride,
-                              padding = padding,
-                              output_padding = 1),
-                    nn.BatchNorm2d(conv_layer_channels[i]),
-                    nn.LeakyReLU())
-            )
-
-        self.cnn = nn.Sequential(*cnn_modules)
-
-    def forward(self, x):
-        x = self.lin(x)
-        x = self.unflatten(x)
-        x = self.cnn(x)
-        x = torch.sigmoid(x)
-        return x
-
-#TODO: if needed, adapt for different kernel_size, padding, stride at different layers
-def cnn_image_sizes(image_size, num_layers, kernel_size, padding, stride):
-    image_sizes = []
-    for i in range(num_layers - 1):
-        image_size = int((image_size + padding - int(kernel_size / 2)) / stride)
-        image_sizes.append(image_size)
-
-    return image_sizes
+import AE_Architectures
 
 #Transform image tensor into matplotlib-displayable image
 def numpy_to_plt(image):
@@ -192,7 +81,8 @@ def test_epoch(encoder, decoder, device, dataloader, loss_fn):
         conc_label = torch.cat(conc_label)
         # Evaluate global loss
         val_loss = loss_fn(conc_out, conc_label)
-    return val_loss.data
+
+    return val_loss.detach().cpu().numpy()
 
 ### Examine examples
 def plot_ae_outputs(encoder, decoder, device, dataloader, n = 10):
@@ -222,27 +112,42 @@ def plot_ae_outputs(encoder, decoder, device, dataloader, n = 10):
 
         if i == n//2:
             ax.set_title('Reconstructed images')
-    plt.show()
+    #Saving image instead of showing - plt.show()
 
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--image_folder", help="path to dataset")
-
-    #parser.add_argument("-o", "--output_file_name", help="path to write output json file")
+    parser.add_argument("-a", "--architecture_name", help="name of file that defines encoder/decoder architecture")
+    parser.add_argument("-o", "--output_folder", help="path to experiment output folder")
     args = parser.parse_args()
 
     #todo: config file that allows for mutliple encoders
     batch_size = 32
     lr = 0.001
     weight_decay = 1e-05
-    num_epochs = 10
-    image_size = 64
+    num_epochs = 15
+    image_size = 128
 
+    #Load architecture
+    architecture = AE_Architectures.architectures[args.architecture_name]
+
+    #Load data
     image_transform = handle_dataloader.default_image_transform(image_size=image_size)
     train_loader = handle_dataloader.create_dataloader(args.image_folder + '/train', image_transform, batch_size = batch_size)
     val_loader = handle_dataloader.create_dataloader(args.image_folder + '/val', image_transform, batch_size = batch_size)
     test_loader = handle_dataloader.create_dataloader(args.image_folder + '/test', image_transform, batch_size = batch_size)
+
+    #Prepare output
+    #Errors will occur before training to avoid wasting time training when output is invalid
+    output_folder_name = args.output_folder + '/' + args.architecture_name + time.strftime("%m%d_%H%M%S")
+    os.mkdir(output_folder_name)
+    output_info = SimpleNamespace()
+    output_info.batch_size = batch_size
+    output_info.lr = lr
+    output_info.weight_decay = weight_decay
+    output_info.num_epochs = num_epochs
+    output_info.image_size = image_size
 
     ### Define the loss function
     loss_fn = torch.nn.MSELoss()
@@ -250,8 +155,8 @@ if __name__ == "__main__":
     ### Set the random seed for reproducible results
     torch.manual_seed(0)
 
-    encoder = Encoder(image_size, [3, 8, 16], [1000, 100])
-    decoder = Decoder(image_size, [3, 8, 16], [1000, 100])
+    encoder = architecture.Encoder(image_size)
+    decoder = architecture.Decoder(image_size)
     params_to_optimize = [
         {'params': encoder.parameters()},
         {'params': decoder.parameters()}
@@ -267,26 +172,33 @@ if __name__ == "__main__":
     encoder.to(device)
     decoder.to(device)
 
-    diz_loss = {'train_loss':[],'val_loss':[]}
+    train_losses = []
+    val_losses = []
     for epoch in range(num_epochs):
         print("\nEpoch {}".format(epoch))
         print("Training...")
         train_loss = train_epoch(encoder, decoder, device,train_loader, loss_fn, optim)
         print("\nTesting...")
         val_loss = test_epoch(encoder, decoder, device, val_loader, loss_fn)
-        #print('\n EPOCH {}/{} \t train loss {} \t val loss {}'.format(epoch + 1, num_epochs, train_loss, val_loss))
-        diz_loss['train_loss'].append(train_loss)
-        diz_loss['val_loss'].append(val_loss)
+        print('\n Train loss: {} \t Val loss: {}'.format(train_loss, val_loss))
+        train_losses.append(train_loss)
+        val_losses.append(val_loss)
+
+    output_info.train_losses = train_losses
+    output_info.val_losses = val_losses
 
 
     plot_ae_outputs(encoder, decoder, device, test_loader, n=10)
+    plt.savefig(output_folder_name + '/AE_Test_Examples')
 
     test_epoch(encoder, decoder, device, test_loader, loss_fn).item()
 
+    handle_json.obj_to_json_file(output_info, output_folder_name + '/info.json')
+
     # Plot losses
     plt.figure(figsize=(10,8))
-    plt.semilogy(diz_loss['train_loss'], label='Train')
-    plt.semilogy(diz_loss['val_loss'], label='Valid')
+    plt.semilogy(train_losses, label='Train')
+    plt.semilogy(val_losses, label='Valid')
     plt.xlabel('Epoch')
     plt.ylabel('Average Loss')
     #plt.grid()

@@ -1,0 +1,140 @@
+{
+  "encoder" :
+  {
+    "conv_layers" :
+    [
+    {
+      "conv_params" :
+      {
+        "input_channels" : 3,
+        "output_channels" : 8,
+        "kernel_size" : 3,
+        "stride" : 1,
+        "padding" : 1
+      },
+      "activation_params" :
+      {
+         "leaky_relu" : true
+      },
+      "pooling_params" :
+      {
+        "kernel_size" : 3,
+        "stride" : 1,
+        "padding" : 1
+      },
+      "use_batching" : true
+    },
+    {
+      "conv_params" :
+      {
+        "input_channels" : 8,
+        "output_channels" : 16,
+        "kernel_size" : 3,
+        "stride" : 1,
+        "padding" : 1
+      },
+      "activation_params" :
+      {
+         "leaky_relu" : true
+      },
+      "pooling_params" :
+      {
+        "kernel_size" : 3,
+        "stride" : 1,
+        "padding" : 1
+      },
+      "use_batching" : true
+    },
+    {
+      "conv_params" :
+      {
+        "input_channels" : 16,
+        "output_channels" : 32,
+        "kernel_size" : 3,
+        "stride" : 1,
+        "padding" : 1
+      },
+      "activation_params" :
+      {
+         "leaky_relu" : true
+      },
+      "pooling_params" :
+      {
+        "kernel_size" : 3,
+        "stride" : 1,
+        "padding" : 1
+      },
+      "use_batching" : true
+    }
+    ]
+  },
+  "decoder" :
+  {
+    "conv_layers" :
+    [
+    {
+      "conv_params" :
+      {
+        "input_channels" : 32,
+        "output_channels" : 16,
+        "kernel_size" : 3,
+        "stride" : 1,
+        "padding" : 1
+      },
+      "activation_params" :
+      {
+         "leaky_relu" : true
+      },
+      "pooling_params" :
+      {
+        "kernel_size" : 3,
+        "stride" : 1,
+        "padding" : 1
+      },
+      "use_batching" : true
+    },
+    {
+      "conv_params" :
+      {
+        "input_channels" : 16,
+        "output_channels" : 8,
+        "kernel_size" : 3,
+        "stride" : 1,
+        "padding" : 1
+      },
+      "activation_params" :
+      {
+         "leaky_relu" : true
+      },
+      "pooling_params" :
+      {
+        "kernel_size" : 3,
+        "stride" : 1,
+        "padding" : 1
+      },
+      "use_batching" : true
+    },
+    {
+      "conv_params" :
+      {
+        "input_channels" : 8,
+        "output_channels" : 3,
+        "kernel_size" : 3,
+        "stride" : 1,
+        "padding" : 1
+      },
+      "activation_params" :
+      {
+         "leaky_relu" : true
+      },
+      "pooling_params" :
+      {
+        "kernel_size" : 3,
+        "stride" : 1,
+        "padding" : 1
+      },
+      "use_batching" : true
+    }
+    ]
+  }
+}
