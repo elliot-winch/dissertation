@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader,random_split
 from torch import nn
 import torch.nn.functional as F
 import torch.optim as optim
+import torch.fft as fft
 
 import argparse
 import time
@@ -21,8 +22,8 @@ from progress_bar import log_progress_bar
 import AE_Architectures
 
 #Transform image tensor into matplotlib-displayable image
-def numpy_to_plt(image):
-    return np.transpose(image.cpu().detach().numpy(), (1, 2, 0))
+def tensor_to_plt(image):
+    return np.transpose(image.cpu().detach().numpy(), (1,2,0))
 
 ### Training function
 def train_epoch(encoder, decoder, device, dataloader, loss_fn, optimizer):
@@ -86,9 +87,6 @@ def test_epoch(encoder, decoder, device, dataloader, loss_fn):
 
 ### Examine examples
 def plot_ae_outputs(encoder, decoder, device, dataloader, n = 10):
-
-    plt.figure(figsize=(16,4.5))
-
     #Use the first batch as an example
     images, _ = next(iter(dataloader))
     with torch.no_grad():
@@ -96,9 +94,16 @@ def plot_ae_outputs(encoder, decoder, device, dataloader, n = 10):
         decoder.eval()
         reconstructed_images = decoder(encoder(images.to(device)))
 
+    plot_images(images, reconstructed_images, n)
+
+
+def plot_images(images, reconstructed_images, n):
+
+    plt.figure(figsize=(16,4.5))
+
     for i in range(min(len(images), n)):
         ax = plt.subplot(2, n, i + 1)
-        plt.imshow(numpy_to_plt(images[i]), cmap='gist_gray')
+        plt.imshow(tensor_to_plt(images[i]), cmap='gist_gray')
         ax.get_xaxis().set_visible(False)
         ax.get_yaxis().set_visible(False)
 
@@ -106,13 +111,26 @@ def plot_ae_outputs(encoder, decoder, device, dataloader, n = 10):
             ax.set_title('Original images')
 
         ax = plt.subplot(2, n, i + 1 + n)
-        plt.imshow(numpy_to_plt(reconstructed_images[i]), cmap='gist_gray')
+        plt.imshow(tensor_to_plt(reconstructed_images[i]), cmap='gist_gray')
         ax.get_xaxis().set_visible(False)
         ax.get_yaxis().set_visible(False)
 
         if i == n//2:
             ax.set_title('Reconstructed images')
-    #Saving image instead of showing - plt.show()
+    #plt.show()
+
+def plot_layer_images(images, layer_images, output_folder_name, layer_name):
+    for i in range(layer_images.shape[1]): #1st dimension is number of channels
+        channel_images = torch.index_select(layer_images, 1, torch.tensor([i]).to(device))
+        plot_images(images, channel_images, n=10)
+        plt.savefig(output_folder_name + "/{}_{}".format(layer_name, i))
+        plt.clf()
+
+loss_func = torch.nn.MSELoss()
+def freq_loss(output, target):
+    output_freq = fft.fft2(output)
+    target_freq = fft.fft2(target)
+    return torch.mean(torch.abs(target_freq.abs() - output.abs()))
 
 if __name__ == "__main__":
 
@@ -126,7 +144,7 @@ if __name__ == "__main__":
     batch_size = 32
     lr = 0.001
     weight_decay = 1e-05
-    num_epochs = 15
+    num_epochs = 8
     image_size = 128
 
     #Load architecture
@@ -150,7 +168,7 @@ if __name__ == "__main__":
     output_info.image_size = image_size
 
     ### Define the loss function
-    loss_fn = torch.nn.MSELoss()
+    loss_fn = freq_loss
 
     ### Set the random seed for reproducible results
     torch.manual_seed(0)
@@ -177,7 +195,7 @@ if __name__ == "__main__":
     for epoch in range(num_epochs):
         print("\nEpoch {}".format(epoch))
         print("Training...")
-        train_loss = train_epoch(encoder, decoder, device,train_loader, loss_fn, optim)
+        train_loss = train_epoch(encoder, decoder, device, train_loader, loss_fn, optim)
         print("\nTesting...")
         val_loss = test_epoch(encoder, decoder, device, val_loader, loss_fn)
         print('\n Train loss: {} \t Val loss: {}'.format(train_loss, val_loss))
@@ -187,6 +205,27 @@ if __name__ == "__main__":
     output_info.train_losses = train_losses
     output_info.val_losses = val_losses
 
+    #See example images from layers
+    images, _ = next(iter(test_loader))
+    images = images.to(device)
+    with torch.no_grad():
+        en_first_layer = encoder.first_layer(images)
+        en_second_layer = encoder.second_layer(en_first_layer)
+        en_third_layer = encoder.third_layer(en_second_layer)
+
+        en_images = encoder(images)
+        de_images = decoder.lin(en_images)
+        de_images = decoder.unflatten(de_images)
+        de_first_layer = decoder.first_layer(de_images)
+        de_second_layer = decoder.second_layer(de_first_layer)
+        de_third_layer = decoder.third_layer(de_second_layer)
+
+    plot_layer_images(images, en_first_layer, output_folder_name, "En_1")
+    plot_layer_images(images, en_second_layer, output_folder_name, "En_2")
+    plot_layer_images(images, en_third_layer, output_folder_name, "En_3")
+    plot_layer_images(images, de_first_layer, output_folder_name, "De_1")
+    plot_layer_images(images, de_second_layer, output_folder_name, "De_2")
+    plot_layer_images(images, de_third_layer, output_folder_name, "De_3")
 
     plot_ae_outputs(encoder, decoder, device, test_loader, n=10)
     plt.savefig(output_folder_name + '/AE_Test_Examples')
@@ -204,4 +243,4 @@ if __name__ == "__main__":
     #plt.grid()
     plt.legend()
     #plt.title('loss')
-    plt.show()
+    #plt.show()
