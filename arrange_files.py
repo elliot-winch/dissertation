@@ -12,84 +12,77 @@ from os.path import isfile, join
 import random
 import sys
 import shutil
-
-
+import argparse
 import handle_json
 
 uses = ["train", "val", "test"]
-
-files = {
-    "train" :
-    {
-        "Failure" : [],
-        "Success" : []
-    },
-    "val" :
-    {
-        "Failure" : [],
-        "Success" : []
-    },
-    "test" :
-    {
-        "Failure" : [],
-        "Success" : []
-    },
-}
+classes = ["Failure", "Success"]
 
 def get_result_from_file_name(file_name):
     #remove file type then get result
     return file_name.split('.')[0].split('_')[4]
 
 def arrange_files(config):
+    sort_files(config.data_dir, config.sorted_data_dir, config.train_prop, config.val_prop, seed=config.seed)
 
-    if os.path.exists(config.data_dir) is False:
-        print("Error: No data folder found at " + config.data_dir)
-        exit()
+def sort_files(input_folder, output_folder, train_prop, val_prop, seed=None):
 
-    if os.path.exists(config.sorted_data_dir) and os.path.isdir(config.sorted_data_dir):
-        shutil.rmtree(config.sorted_data_dir)
+    #If required, make this parameterisable
+    files = {
+        "train" :
+        {
+            "Failure" : [],
+            "Success" : []
+        },
+        "val" :
+        {
+            "Failure" : [],
+            "Success" : []
+        },
+        "test" :
+        {
+            "Failure" : [],
+            "Success" : []
+        },
+    }
 
-    random.seed(config.seed)
+    if seed is not None:
+        random.seed(seed)
 
-    file_names = [f for f in listdir(config.data_dir) if isfile(join(config.data_dir, f))]
+    file_names = [f for f in listdir(input_folder) if isfile(join(input_folder, f))]
     random.shuffle(file_names)
 
     for i in range(len(file_names)):
-        sort_file(config, file_names, i)
+        file_name = file_names[i]
+        result = get_result_from_file_name(file_name)
 
-def sort_file(config, file_names, index):
-    file_name = file_names[index]
-    result = get_result_from_file_name(file_name)
+        if result not in classes:
+            continue
 
-    if result not in config.classes:
-        return
+        #Split data set into train / test / validation
+        usage = ""
+        prop = i / len(file_names)
+        if prop < train_prop:
+            usage = uses[0]
+        elif prop < train_prop + val_prop:
+            usage = uses[1]
+        else:
+            usage = uses[2]
 
-    #Split data set into train / test / validation
-    usage = ""
-    prop = index / len(file_names)
-    if prop < config.train_prop:
-        usage = uses[0]
-    elif prop < config.train_prop + config.val_prop:
-        usage = uses[1]
-    else:
-        usage = uses[2]
+        location = output_folder + '/' + usage + '/' + result
 
-    location = config.sorted_data_dir + '/' + usage + '/' + result
+        files[usage][result].append(location + '/' + file_name)
+        shutil.copyfile(input_folder + '/' + file_name, location + '/' + file_name)
 
-    if path.isdir(location) is False:
-        if path.isdir(config.sorted_data_dir + '/' + usage) is False:
-            if path.isdir(config.sorted_data_dir) is False:
-                os.mkdir(config.sorted_data_dir)
-            os.mkdir(config.sorted_data_dir + '/' + usage)
-        os.mkdir(location)
-
-    files[usage][result].append(location + '/' + file_name)
-    shutil.copyfile(config.data_dir + '/' + file_name, location + '/' + file_name)
+    return files
 
 if __name__ == '__main__':
 
-    if len(sys.argv) > 1:
-        config_file_name = sys.argv[1]
-        arrange_files(handle_json.json_file_to_obj(config_file_name))
-    else:
-        print("Please provide config file path")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i", "--input_folder", help="path to dataset")
+    parser.add_argument("-o", "--output_folder", help="path to output folder")
+    parser.add_argument("-t", "--train_prop", help="proportion of files to put in the train folder")
+    parser.add_argument("-v", "--val_prop", help="proportion of files to put in the val folder")
+    args = parser.parse_args()
+
+    sort_files(args.input_folder, args.output_folder, float(args.train_prop), float(args.val_prop))

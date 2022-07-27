@@ -16,15 +16,15 @@ class Encoder(nn.Module):
         image_size = image_size_after_convolution(image_size, 3, 1, 2)
 
         self.first_layer = nn.Sequential(
-            nn.Conv2d(3, 8, 3, stride=2, padding=1),
-            #nn.BatchNorm2d(8),
+            nn.Conv2d(1, 8, 3, stride=2, padding=1),
+            nn.BatchNorm2d(8),
             nn.ReLU(True),
             nn.MaxPool2d(1, stride=1),
         )
 
         self.second_layer = nn.Sequential(
             nn.Conv2d(8, 16, 3, stride=2, padding=1),
-            #nn.BatchNorm2d(16),
+            nn.BatchNorm2d(16),
             nn.ReLU(True),
             nn.MaxPool2d(1, stride=1),
         )
@@ -32,7 +32,7 @@ class Encoder(nn.Module):
         ### Convolutional layers
         self.third_layer = nn.Sequential(
             nn.Conv2d(16, 32, 3, stride=2, padding=1),
-            #nn.BatchNorm2d(32),
+            nn.BatchNorm2d(32),
             nn.ReLU(True),
             nn.MaxPool2d(1, stride=1),
         )
@@ -79,18 +79,19 @@ class Decoder(nn.Module):
         ### 3 - Convolutional layers
         self.first_layer = nn.Sequential(
             nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1, output_padding=1),
-            #nn.BatchNorm2d(16),
+            nn.BatchNorm2d(16),
             nn.ReLU(True),
         )
 
         self.second_layer = nn.Sequential(
             nn.ConvTranspose2d(16, 8, 3, stride=2, padding=1, output_padding=1),
-            #nn.BatchNorm2d(8),
+            nn.BatchNorm2d(8),
             nn.ReLU(True),
         )
 
         self.third_layer = nn.Sequential(
-            nn.ConvTranspose2d(8, 3, 3, stride=2, padding=1, output_padding=1),
+            nn.ConvTranspose2d(8, 1, 3, stride=2, padding=1, output_padding=1),
+            #nn.BatchNorm2d(1),
             nn.ReLU(True),
         )
 

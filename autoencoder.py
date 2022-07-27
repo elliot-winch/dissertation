@@ -103,7 +103,7 @@ def plot_images(images, reconstructed_images, n):
 
     for i in range(min(len(images), n)):
         ax = plt.subplot(2, n, i + 1)
-        plt.imshow(tensor_to_plt(images[i]), cmap='gist_gray')
+        plt.imshow(tensor_to_plt(images[i]), cmap='gray')
         ax.get_xaxis().set_visible(False)
         ax.get_yaxis().set_visible(False)
 
@@ -111,7 +111,7 @@ def plot_images(images, reconstructed_images, n):
             ax.set_title('Original images')
 
         ax = plt.subplot(2, n, i + 1 + n)
-        plt.imshow(tensor_to_plt(reconstructed_images[i]), cmap='gist_gray')
+        plt.imshow(tensor_to_plt(reconstructed_images[i]), cmap='gray')
         ax.get_xaxis().set_visible(False)
         ax.get_yaxis().set_visible(False)
 
@@ -126,11 +126,13 @@ def plot_layer_images(images, layer_images, output_folder_name, layer_name):
         plt.savefig(output_folder_name + "/{}_{}".format(layer_name, i))
         plt.clf()
 
+"""
 loss_func = torch.nn.MSELoss()
 def freq_loss(output, target):
     output_freq = fft.fft2(output)
     target_freq = fft.fft2(target)
     return torch.mean(torch.abs(target_freq.abs() - output.abs()))
+"""
 
 if __name__ == "__main__":
 
@@ -151,7 +153,13 @@ if __name__ == "__main__":
     architecture = AE_Architectures.architectures[args.architecture_name]
 
     #Load data
-    image_transform = handle_dataloader.default_image_transform(image_size=image_size)
+    image_transform = transforms.Compose([
+        transforms.Resize(image_size),
+        transforms.Grayscale(num_output_channels=1),
+        transforms.ToTensor(),
+        #Numbers specified by PyTorch
+        #transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
     train_loader = handle_dataloader.create_dataloader(args.image_folder + '/train', image_transform, batch_size = batch_size)
     val_loader = handle_dataloader.create_dataloader(args.image_folder + '/val', image_transform, batch_size = batch_size)
     test_loader = handle_dataloader.create_dataloader(args.image_folder + '/test', image_transform, batch_size = batch_size)
@@ -168,7 +176,7 @@ if __name__ == "__main__":
     output_info.image_size = image_size
 
     ### Define the loss function
-    loss_fn = freq_loss
+    loss_fn = torch.nn.MSELoss()
 
     ### Set the random seed for reproducible results
     torch.manual_seed(0)
@@ -229,8 +237,6 @@ if __name__ == "__main__":
 
     plot_ae_outputs(encoder, decoder, device, test_loader, n=10)
     plt.savefig(output_folder_name + '/AE_Test_Examples')
-
-    test_epoch(encoder, decoder, device, test_loader, loss_fn).item()
 
     handle_json.obj_to_json_file(output_info, output_folder_name + '/info.json')
 
