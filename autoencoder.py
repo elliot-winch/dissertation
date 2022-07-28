@@ -140,25 +140,27 @@ if __name__ == "__main__":
     parser.add_argument("-i", "--image_folder", help="path to dataset")
     parser.add_argument("-a", "--architecture_name", help="name of file that defines encoder/decoder architecture")
     parser.add_argument("-o", "--output_folder", help="path to experiment output folder")
+    parser.add_argument("-g", "--greyscale", help="are the input images in greyscale?", action="store_true")
     args = parser.parse_args()
 
     #todo: config file that allows for mutliple encoders
     batch_size = 32
     lr = 0.001
     weight_decay = 1e-05
-    num_epochs = 8
-    image_size = 128
+    num_epochs = 10
+    image_size = 32
 
     #Load architecture
     architecture = AE_Architectures.architectures[args.architecture_name]
 
+    tfs = []
+    tfs.append(transforms.Resize(image_size))
+    if args.greyscale:
+        tfs.append(transforms.Grayscale(num_output_channels=1))
+    tfs.append(transforms.ToTensor())
+
     #Load data
-    image_transform = transforms.Compose([
-        transforms.Resize(image_size),
-        transforms.ToTensor(),
-        #Numbers specified by PyTorch
-        #transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    ])
+    image_transform = transforms.Compose(tfs)
     train_loader = handle_dataloader.create_dataloader(args.image_folder + '/train', image_transform, batch_size = batch_size)
     val_loader = handle_dataloader.create_dataloader(args.image_folder + '/val', image_transform, batch_size = batch_size)
     test_loader = handle_dataloader.create_dataloader(args.image_folder + '/test', image_transform, batch_size = batch_size)
@@ -200,6 +202,7 @@ if __name__ == "__main__":
 
     train_losses = []
     val_losses = []
+    print("Running for {} epochs".format(num_epochs))
     for epoch in range(num_epochs):
         print("\nEpoch {}".format(epoch))
         print("Training...")
@@ -228,12 +231,13 @@ if __name__ == "__main__":
         de_second_layer = decoder.second_layer(de_first_layer)
         de_third_layer = decoder.third_layer(de_second_layer)
 
-    plot_layer_images(images, en_first_layer, output_folder_name, "En_1")
-    plot_layer_images(images, en_second_layer, output_folder_name, "En_2")
-    plot_layer_images(images, en_third_layer, output_folder_name, "En_3")
-    plot_layer_images(images, de_first_layer, output_folder_name, "De_1")
-    plot_layer_images(images, de_second_layer, output_folder_name, "De_2")
-    plot_layer_images(images, de_third_layer, output_folder_name, "De_3")
+    plot_max_layers = 10
+    #plot_layer_images(images[:plot_max_layers], en_first_layer[:plot_max_layers], output_folder_name, "En_1")
+    #plot_layer_images(images[:plot_max_layers], en_second_layer[:plot_max_layers], output_folder_name, "En_2")
+    #plot_layer_images(images[:plot_max_layers], en_third_layer[:plot_max_layers], output_folder_name, "En_3")
+    #plot_layer_images(images[:plot_max_layers], de_first_layer[:plot_max_layers], output_folder_name, "De_1")
+    #plot_layer_images(images[:plot_max_layers], de_second_layer[:plot_max_layers], output_folder_name, "De_2")
+    #plot_layer_images(images[:plot_max_layers], de_third_layer[:plot_max_layers], output_folder_name, "De_3")
 
     plot_ae_outputs(encoder, decoder, device, test_loader, n=10)
     plt.savefig(output_folder_name + '/AE_Test_Examples')

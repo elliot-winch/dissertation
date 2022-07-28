@@ -6,6 +6,7 @@ import AE_Architecture_2607_1
 import AE_Architecture_2707_greyscale
 import AE_Architecture_2707_greyscale_2
 import AE_Architecture_2707_NoBlue
+import AE_Architecture_2807_1
 
 
 architectures = {
@@ -17,5 +18,6 @@ architectures = {
     "AE_Architecture_2707_greyscale" : AE_Architecture_2707_greyscale,
     "AE_Architecture_2707_greyscale_2" : AE_Architecture_2707_greyscale_2,
     "AE_Architecture_2707_NoBlue" : AE_Architecture_2707_NoBlue,
+    "AE_Architecture_2807_1" : AE_Architecture_2807_1,
 
 }
