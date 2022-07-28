@@ -155,6 +155,7 @@ if __name__ == "__main__":
     #Load data
     image_transform = transforms.Compose([
         transforms.Resize(image_size),
+        transforms.Grayscale(num_output_channels=1),
         transforms.ToTensor(),
         #Numbers specified by PyTorch
         #transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
@@ -191,7 +192,6 @@ if __name__ == "__main__":
 
     # Check if the GPU is available
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-    print(torch.cuda.is_available())
     print(f'Selected device: {device}')
 
     # Move both the encoder and the decoder to the selected device
