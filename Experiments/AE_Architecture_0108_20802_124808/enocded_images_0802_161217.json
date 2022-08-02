@@ -1,0 +1,340 @@
+{
+  "encoded_images": [
+    {
+      "file_name": [
+        "test_data\\test\\Failure\\04f2ab4b-ba08-436a-9d39-7598fb72efd6_Female_65_Phakic_Failure.png",
+        0
+      ],
+      "feature_vector": "[[-2.1560028   1.5034851   4.0665245  -2.5271928  -6.371556    0.00972178\n  -5.9916954   4.0883455  -4.7203736  -5.9021587 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\test\\Failure\\2ac65e3c-c84f-7029-db2e-00000b0c33b8_Male_58_Phakic_Failure.png",
+        0
+      ],
+      "feature_vector": "[[ 5.5581164  -0.3363028  -0.8244525  -3.6749992   1.688937   -0.40685254\n  -7.836236   -8.394075   -0.11995371 -1.9467567 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\test\\Failure\\2b0834c9-3dbc-7ec9-8218-000036410da3_Female_69_Phakic_Failure.png",
+        0
+      ],
+      "feature_vector": "[[ 7.9740105   1.3316791   8.224619    0.03425294 -0.30990684 -0.6041728\n  -7.678632    3.6615107  -2.6496174   2.584388  ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\test\\Failure\\2f3d65f2-7826-c5a8-8b9c-000013d33233_Male_68_Phakic_Failure.png",
+        0
+      ],
+      "feature_vector": "[[ 4.0411587   6.998091   -0.58772504 -6.724822   -5.7541437  -2.8529336\n   1.2129002   0.4674125   3.7360795   1.8630825 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\test\\Failure\\4b0feb76-989a-455a-b6a8-daa6d1521737_Female_56_Phakic_Failure.png",
+        0
+      ],
+      "feature_vector": "[[-7.2606888e+00  3.9346864e+00  8.1735104e-01 -7.0277872e+00\n  -7.1064596e+00 -4.3402300e+00  1.0926668e-03 -7.4742526e-01\n  -2.4978282e+00  4.7807465e+00]]"
+    },
+    {
+      "file_name": [
+        "test_data\\test\\Failure\\6f10de89-d9e7-489f-af53-3c051cfe30ff_Male_68_Phakic_Failure.png",
+        0
+      ],
+      "feature_vector": "[[15.167735   -0.24403015 -1.381701   -5.9853187   1.125272   -4.287848\n   2.3849707   3.0213807  -4.061691    0.03186226]]"
+    },
+    {
+      "file_name": [
+        "test_data\\test\\Failure\\7c82e30a-c83e-05a8-4bb1-0000430dbf28_Female_47_PC-IOL_Failure.png",
+        0
+      ],
+      "feature_vector": "[[-8.6800165e+00  3.4937658e+00 -3.6024541e-01 -6.9412632e+00\n  -4.3503399e+00 -5.8895383e+00  5.9316326e-03  3.0669045e+00\n  -7.7329569e+00  2.5108542e+00]]"
+    },
+    {
+      "file_name": [
+        "test_data\\test\\Failure\\7c9133b1-3c09-aac9-e201-00006823d1eb_Female_64_PC-IOL_Failure.png",
+        0
+      ],
+      "feature_vector": "[[ 8.508738   -0.66883206  4.8703847  -4.9009614   0.02017426 -6.785176\n   1.8201724   4.5932117  -5.478611    5.974236  ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\test\\Success\\01e767ed-fa59-6c69-0af1-00001a15360b_Male_52_PC-IOL_Success.png",
+        0
+      ],
+      "feature_vector": "[[ 5.0504785   5.1119204  -0.76687443 -7.2572436  -6.94946    -5.9478097\n   1.5690192   1.4592062   4.0407386  -1.5484245 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\test\\Success\\0a4eaf52-a75f-5a68-8a9e-0000696e2447_Male_72_Phakic_Success.png",
+        0
+      ],
+      "feature_vector": "[[  7.081082     2.9480526   -3.429109     0.48318127  -3.9864383\n   -7.085528    -5.885586    -2.4489903   -1.0627683  -13.9192705 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\test\\Success\\0c452ca2-256c-4217-8799-7aaa8a2ddd3d_Female_57_Phakic_Success.png",
+        0
+      ],
+      "feature_vector": "[[ 4.1036134   2.2674935  -0.11843383 -5.083851    4.667507   -1.751486\n  -7.7230306  -9.138728   -2.5151477  -3.6419914 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\test\\Success\\0cf1b577-cf91-14c8-5ba1-00006d7b3765_Male_60_Phakic_Success.png",
+        0
+      ],
+      "feature_vector": "[[ 3.3802326   3.1680872   2.8508887  -5.1633153   2.1084805  -9.005915\n  -0.16808705  6.687574   -0.776943    7.727687  ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\test\\Success\\0df1a0d1-0002-49e8-72b8-00003ea19560_Male_71_Phakic_Success.png",
+        0
+      ],
+      "feature_vector": "[[  1.292998     0.81691206  -2.0804327   -8.635755    -1.0478791\n   -4.4524345   -5.035631   -12.962874    -3.13754      0.2853382 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\test\\Success\\0f47f62c-ab3f-baa8-1b68-000076f9f0cc_Male_42_Phakic_Success.png",
+        0
+      ],
+      "feature_vector": "[[  5.374452    4.319947    1.8717864  -7.2672787   3.3223138 -10.48012\n   -1.4260134   1.7659253   3.3867793   3.827181 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\test\\Success\\0f91bd74-6e2d-4f5d-9b50-5a765f1e9602_Male_49_Phakic_Success.png",
+        0
+      ],
+      "feature_vector": "[[-3.008797   3.5060127  3.852268  -1.6734385 -6.274117   1.1675036\n  -6.093447   4.9423714 -5.9450912 -5.1148896]]"
+    },
+    {
+      "file_name": [
+        "test_data\\test\\Success\\1a1f0728-12db-0f69-f308-000078612f23_Male_64_Phakic_Success.png",
+        0
+      ],
+      "feature_vector": "[[ 2.280376   2.5889027  5.120168  -8.269738   0.8705798 -3.0392282\n   0.8937535  2.5133889 -3.682683  11.675089 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\train\\Failure\\00b126e8-b224-1288-03fe-00000d1a119b_Female_64_Phakic_Failure.png",
+        1
+      ],
+      "feature_vector": "[[  5.0180993   2.3520005   4.498293   -6.048838    2.2033021 -13.227474\n   -0.9660498   0.735029    1.8356104   5.4967694]]"
+    },
+    {
+      "file_name": [
+        "test_data\\train\\Failure\\00b7ba79-315d-d888-03c0-00006dea2fc8_Male_60_Phakic_Failure.png",
+        1
+      ],
+      "feature_vector": "[[10.826466    4.745877   -5.0773816  -1.1247729  -1.3857288  -6.232486\n   2.5462232  -3.7179968   0.58816695  1.9005672 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\train\\Failure\\0a0be9e3-a433-8149-e3e0-000052b85f09_Female_46_Phakic_Failure.png",
+        1
+      ],
+      "feature_vector": "[[  4.5951996    3.6421397   -7.879675    -3.7964876   -0.04828823\n  -10.001241    -0.7683025    2.3917706    1.1582414   -1.4317772 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\train\\Failure\\0a3f0948-9849-ed28-e217-000005ab0ee5_Male_75_Phakic_Failure.png",
+        1
+      ],
+      "feature_vector": "[[ -0.92253953   4.309339    -6.249877    -3.5052624   -4.740096\n   -2.307473    -3.6046138  -10.845333    -4.52062     -0.07813784]]"
+    },
+    {
+      "file_name": [
+        "test_data\\train\\Failure\\0a4aa55d-6119-4f5d-8d22-74397b56895c_Female_85_PC-IOL_Failure.png",
+        1
+      ],
+      "feature_vector": "[[ 7.174845    6.621402   -4.041111   -6.122234    1.1866773  -5.2154217\n  -0.80802536  3.3883479   3.723718    1.515998  ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\train\\Failure\\0a6d6aed-7ef0-34e8-9b03-00005a2f3181_Male_61_Phakic_Failure.png",
+        1
+      ],
+      "feature_vector": "[[ 4.9144015   3.8120592   6.7598667  -6.1864405   1.4699639   3.3913035\n  -0.32183626  8.014543   -4.075461    4.643498  ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\train\\Failure\\0b846e78-9568-a5c8-fa55-000024cd9506_Male_62_Phakic_Failure.png",
+        1
+      ],
+      "feature_vector": "[[ 3.5078285   2.3664563   4.086363   -6.2964735   1.6229441  -9.640265\n   0.04182276  5.40641    -1.2234594   8.1319685 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\train\\Failure\\0bc0860a-0d46-4636-a83d-c12edab19ed7_Male_60_Phakic_Failure.png",
+        1
+      ],
+      "feature_vector": "[[ -6.2792435    5.769938    -3.72805    -12.454989    -2.9602563\n   -1.8106358   -1.1708766   -2.318374    -1.9789585   -0.84493935]]"
+    },
+    {
+      "file_name": [
+        "test_data\\train\\Success\\00a06885-b15d-4faf-95de-cbf57024baa2_Male_72_Phakic_Success.png",
+        1
+      ],
+      "feature_vector": "[[ 3.10807    8.282431  -1.2493649 -7.573537  -4.6878963  1.2967006\n   1.2418219 -0.4891677  2.6924531  4.14683  ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\train\\Success\\00ac6728-f899-e588-b2f4-00002d674362_Male_54_Phakic_Success.png",
+        1
+      ],
+      "feature_vector": "[[ 0.08129649  3.6244078  -6.2869625  -7.2566056  -4.344949   -6.632629\n   2.3231225  -2.6963003  -1.169187   -3.9611824 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\train\\Success\\00b32cf9-e8af-49bf-b03b-c4c599dc0587_Male_35_Phakic_Success.png",
+        1
+      ],
+      "feature_vector": "[[  3.2397218   -0.6264966   -4.7051797  -11.30184      1.7216507\n  -11.932709    -2.1549428   -7.441735    -3.4240081   -0.57920617]]"
+    },
+    {
+      "file_name": [
+        "test_data\\train\\Success\\00bee364-38ea-43fe-b0f7-bfef624a18a0_Male_50_Phakic_Success.png",
+        1
+      ],
+      "feature_vector": "[[ 4.9804244  6.2054715 -3.0529149 -8.063787  -6.464947  -3.894255\n   2.4423242 -0.7690137  2.5568905 -2.7164886]]"
+    },
+    {
+      "file_name": [
+        "test_data\\train\\Success\\00bf8354-1eea-4466-9c13-c0496cc9945d_Female_57_Phakic_Success.png",
+        1
+      ],
+      "feature_vector": "[[13.733666   1.1890433  5.9141536  2.1302285  1.3749139 -2.547301\n   0.6886253  1.71671   -4.8081994 -1.0074203]]"
+    },
+    {
+      "file_name": [
+        "test_data\\train\\Success\\00c737e6-0e54-43c3-b006-3deab9d8b70e_Male_64_PC-IOL_Success.png",
+        1
+      ],
+      "feature_vector": "[[-8.145356    5.242854    0.35592905 -8.43213    -4.4572816  -4.697138\n   0.11273556 -2.0592825  -2.473929    2.5416374 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\train\\Success\\00e7d07a-f21f-fce8-6b8e-000016297107_Male_50_Phakic_Success.png",
+        1
+      ],
+      "feature_vector": "[[-2.8516626   0.8405322   2.9384732  -1.2311734  -8.000715    9.016385\n  -4.7700176  -0.4920566  -2.0463161  -0.35041592]]"
+    },
+    {
+      "file_name": [
+        "test_data\\train\\Success\\00ec3ff2-ece4-b5e9-f342-0000461c7597_Female_80_PC-IOL_Success.png",
+        1
+      ],
+      "feature_vector": "[[ 9.871936    1.7175031   9.618146    0.04519411  0.8187174   0.19666629\n  -1.3200598   1.4311047  -4.0346265   1.4712634 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\val\\Failure\\01aff398-66fb-4f1f-b043-6f6bd979c5c9_Female_64_Phakic_Failure.png",
+        2
+      ],
+      "feature_vector": "[[ 2.916058    2.1848803   0.47306558 -7.001146    3.0997598   2.5487535\n  -6.881136   -9.750946   -4.120718   -3.6774244 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\val\\Failure\\04d603cd-9971-c788-b399-00004e9d4006_Male_73_Phakic_Failure.png",
+        2
+      ],
+      "feature_vector": "[[ -0.18672997   1.2634414   -4.6415     -11.009526    -3.2539659\n   -6.020175     1.4896538  -10.36521     -4.744647    -0.7851393 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\val\\Failure\\3a7dbb97-ad66-4688-3b76-000047fb570b_Male_40_Phakic_Failure.png",
+        2
+      ],
+      "feature_vector": "[[ 7.5248275  5.842654  -2.255527  -6.249689  -4.897269  -7.263134\n   0.6585983  2.1882844  4.390601  -2.2031848]]"
+    },
+    {
+      "file_name": [
+        "test_data\\val\\Failure\\3e4710b6-35a8-aa48-2a7c-000030bae4f5_Male_72_PC-IOL_Failure.png",
+        2
+      ],
+      "feature_vector": "[[-2.9247756   5.1886725   1.4817586   0.20656955  1.2227455   2.4696507\n  -8.362435    7.791815   -6.3940163  -1.5777975 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\val\\Failure\\4bc31999-02d0-6248-02af-00005681f666_Female_48_Phakic_Failure.png",
+        2
+      ],
+      "feature_vector": "[[ 2.5188806  3.5647383 -4.254356  -8.055919  -4.8268013 -5.8779855\n   4.6658936 -7.8424344 -3.119507  -3.587712 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\val\\Failure\\5c1a78dc-545b-87e8-53f1-00001752d35e_Male_65_PC-IOL_Failure.png",
+        2
+      ],
+      "feature_vector": "[[ 7.1529083   2.586372    7.8829126  -0.27585807  0.296944    0.17839225\n  -7.894705    5.3067203  -2.0956182   2.5439787 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\val\\Failure\\6be0a400-b527-4aa8-5b57-0000415089ca_Male_76_Phakic_Failure.png",
+        2
+      ],
+      "feature_vector": "[[-3.0196025   4.0222006   3.9269059  -0.568514   -5.7705426  -0.01840207\n  -6.2907977   5.0248036  -6.294709   -5.68642   ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\val\\Failure\\6c5595cf-93dd-416b-9e11-02e771e7d2e1_Female_80_PC-IOL_Failure.png",
+        2
+      ],
+      "feature_vector": "[[ 8.79986     1.3685062   9.411944   -4.137643    1.0564829  -0.96686554\n   0.42589638  3.9522839  -4.2564025   1.875998  ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\val\\Success\\0a11964e-d70d-4dc2-872f-48d353845e8d_Male_64_Phakic-cataract_Success.png",
+        2
+      ],
+      "feature_vector": "[[ 10.203752     0.27631122  -0.82818466   2.626131     0.20708968\n  -13.8488035   -2.702336    -3.58304     -2.1045988    6.94776   ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\val\\Success\\0a74e70c-ded7-4376-8319-a6634864d688_Female_55_Phakic_Success.png",
+        2
+      ],
+      "feature_vector": "[[ 3.940018    2.0413923   4.2750354  -8.945453    0.52879083 -1.9904274\n   0.6502831   5.9526157  -3.8384686   9.638415  ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\val\\Success\\0a7c93f1-d3a8-43bf-b749-81c8791b879a_Male_76_Phakic_Success.png",
+        2
+      ],
+      "feature_vector": "[[ 4.6510715  5.797427   3.8962064  4.1375012  0.8493649  2.1856692\n  -8.868534   8.5399885 -3.221973   2.1009777]]"
+    },
+    {
+      "file_name": [
+        "test_data\\val\\Success\\0b63b7e2-7ede-4a98-affc-a542ec6b783a_Female_71_PC-IOL_Success.png",
+        2
+      ],
+      "feature_vector": "[[ 7.790851   -0.7712689   4.91802    -6.672333   -0.13193409 -7.442504\n   1.381742    4.9536448  -4.256824    6.5583344 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\val\\Success\\0dad211a-51ad-466e-bab0-17ba9f19ef3d_Male_65_Phakic_Success.png",
+        2
+      ],
+      "feature_vector": "[[ 2.2118196  4.693622   3.181352  -1.7660728  1.9589338 -9.985277\n  -1.602606   4.35972    1.2623324  7.4234595]]"
+    },
+    {
+      "file_name": [
+        "test_data\\val\\Success\\0dea3a7e-cadb-3da9-5b00-0000427fb696_Female_72_Phakic_Success.png",
+        2
+      ],
+      "feature_vector": "[[  3.034825    3.594835   -2.4154437  -6.2881937  -5.7396183   3.9845765\n   -6.345744    4.2218633  -2.9559615 -10.494375 ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\val\\Success\\0e3dfe75-1a64-4403-a9fd-20b4b47664fa_Female_47_Phakic_Success.png",
+        2
+      ],
+      "feature_vector": "[[ 4.454002    3.9545276   1.537873   -4.202083   -0.08044802  0.93937033\n  -0.5690264  10.244428   -4.047069    7.895934  ]]"
+    },
+    {
+      "file_name": [
+        "test_data\\val\\Success\\0e56fed0-3a31-465f-8b03-7c909c619337_Female_78_Phakic-cataract_Success.png",
+        2
+      ],
+      "feature_vector": "[[ 3.628837    0.45653763  0.5657645  -7.390734   -0.702489    5.9844427\n  -4.270943   -5.2862964  -8.881221   -3.0170872 ]]"
+    }
+  ]
+}

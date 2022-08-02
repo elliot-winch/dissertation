@@ -141,14 +141,15 @@ if __name__ == "__main__":
     parser.add_argument("-a", "--architecture_name", help="name of file that defines encoder/decoder architecture")
     parser.add_argument("-o", "--output_folder", help="path to experiment output folder")
     parser.add_argument("-g", "--greyscale", help="are the input images in greyscale?", action="store_true")
+    parser.add_argument("-s", "--save", help="save the model?", action="store_true")
     args = parser.parse_args()
 
     #todo: config file that allows for mutliple encoders
     batch_size = 32
     lr = 0.001
     weight_decay = 1e-05
-    num_epochs = 10
-    image_size = 32
+    num_epochs = 15
+    image_size = 128
 
     #Load architecture
     architecture = AE_Architectures.architectures[args.architecture_name]
@@ -169,12 +170,15 @@ if __name__ == "__main__":
     #Errors will occur before training to avoid wasting time training when output is invalid
     output_folder_name = args.output_folder + '/' + args.architecture_name + time.strftime("%m%d_%H%M%S")
     os.mkdir(output_folder_name)
+
     output_info = SimpleNamespace()
     output_info.batch_size = batch_size
     output_info.lr = lr
     output_info.weight_decay = weight_decay
     output_info.num_epochs = num_epochs
     output_info.image_size = image_size
+    output_info.greyscale = args.greyscale
+    output_info.architecture_name = args.architecture_name
 
     ### Define the loss function
     loss_fn = torch.nn.MSELoss()
@@ -193,7 +197,6 @@ if __name__ == "__main__":
 
     # Check if the GPU is available
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-    print(torch.cuda.is_available())
     print(f'Selected device: {device}')
 
     # Move both the encoder and the decoder to the selected device
@@ -212,6 +215,10 @@ if __name__ == "__main__":
         print('\n Train loss: {} \t Val loss: {}'.format(train_loss, val_loss))
         train_losses.append(train_loss)
         val_losses.append(val_loss)
+
+    if args.save:
+        torch.save(encoder.state_dict(), output_folder_name + '/model_encoder.pth')
+        torch.save(decoder.state_dict(), output_folder_name + '/model_decoder.pth')
 
     output_info.train_losses = train_losses
     output_info.val_losses = val_losses
@@ -232,12 +239,12 @@ if __name__ == "__main__":
         de_third_layer = decoder.third_layer(de_second_layer)
 
     plot_max_layers = 10
-    #plot_layer_images(images[:plot_max_layers], en_first_layer[:plot_max_layers], output_folder_name, "En_1")
+    plot_layer_images(images[:plot_max_layers], en_first_layer[:plot_max_layers], output_folder_name, "En_1")
     #plot_layer_images(images[:plot_max_layers], en_second_layer[:plot_max_layers], output_folder_name, "En_2")
     #plot_layer_images(images[:plot_max_layers], en_third_layer[:plot_max_layers], output_folder_name, "En_3")
     #plot_layer_images(images[:plot_max_layers], de_first_layer[:plot_max_layers], output_folder_name, "De_1")
     #plot_layer_images(images[:plot_max_layers], de_second_layer[:plot_max_layers], output_folder_name, "De_2")
-    #plot_layer_images(images[:plot_max_layers], de_third_layer[:plot_max_layers], output_folder_name, "De_3")
+    plot_layer_images(images[:plot_max_layers], de_third_layer[:plot_max_layers], output_folder_name, "De_3")
 
     plot_ae_outputs(encoder, decoder, device, test_loader, n=10)
     plt.savefig(output_folder_name + '/AE_Test_Examples')

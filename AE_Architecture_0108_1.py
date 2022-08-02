@@ -4,6 +4,7 @@ from torch import nn
 from image_size_calculations import image_size_after_convolution
 
 encoded_space_dim = 10
+leaky_relu_negative_slope = 0.3
 
 class Encoder(nn.Module):
 
@@ -17,13 +18,13 @@ class Encoder(nn.Module):
 
         self.first_layer = nn.Sequential(
             nn.Conv2d(3, 32, 3, stride=2, padding=1),
-            #nn.ReLU(True),
+            nn.LeakyReLU(negative_slope=leaky_relu_negative_slope, inplace=True)
             #nn.BatchNorm2d(8),
         )
 
         self.second_layer = nn.Sequential(
             nn.Conv2d(32, 64, 3, stride=2, padding=1),
-            #nn.ReLU(True),
+            nn.LeakyReLU(negative_slope=leaky_relu_negative_slope, inplace=True)
             #nn.MaxPool2d(1, stride=1),
             #nn.BatchNorm2d(16),
         )
@@ -32,7 +33,7 @@ class Encoder(nn.Module):
 
         self.third_layer = nn.Sequential(
             nn.Conv2d(64, 128, 3, stride=2, padding=1),
-            #nn.ReLU(True),
+            nn.LeakyReLU(negative_slope=leaky_relu_negative_slope, inplace=True)
             #nn.MaxPool2d(1, stride=1),
             #nn.BatchNorm2d(32),
         )
@@ -79,18 +80,19 @@ class Decoder(nn.Module):
         ### 3 - Convolutional layers
         self.first_layer = nn.Sequential(
             nn.ConvTranspose2d(128, 64, 3, stride=2, padding=1, output_padding=1),
-            #nn.ReLU(True),
+            nn.LeakyReLU(negative_slope=leaky_relu_negative_slope, inplace=True)
             #nn.BatchNorm2d(8),
         )
 
         self.second_layer = nn.Sequential(
             nn.ConvTranspose2d(64, 32, 3, stride=2, padding=1, output_padding=1),
-            #nn.ReLU(True),
+            nn.LeakyReLU(negative_slope=leaky_relu_negative_slope, inplace=True)
         )
 
 
         self.third_layer = nn.Sequential(
             nn.ConvTranspose2d(32, 3, 3, stride=2, padding=1, output_padding=1),
+            nn.LeakyReLU(negative_slope=leaky_relu_negative_slope, inplace=True)
         )
 
     def forward(self, x):
