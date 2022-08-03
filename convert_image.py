@@ -12,6 +12,7 @@ def numpy_to_tensor(array):
     tf = transforms.ToTensor()
     return tf(array) #np.transpose(array, (2,0,1)))
 
+#Testing
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--test_image", help="path to test image")

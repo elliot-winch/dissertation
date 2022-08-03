@@ -64,7 +64,8 @@ if __name__ == "__main__":
 
             entry = SimpleNamespace()
             entry.file_name = file_paths[i]
-            entry.feature_vector = encoded_data.cpu().detach().numpy().tolist()
+            #0 index to resqueeze the image
+            entry.feature_vector = encoded_data.cpu().detach().numpy().tolist()[0]
             file_contents.encoded_images.append(entry)
         log_progress_bar(1)
 
