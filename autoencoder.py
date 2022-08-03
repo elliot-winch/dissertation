@@ -20,10 +20,7 @@ import handle_dataloader
 import handle_json
 from progress_bar import log_progress_bar
 import AE_Architectures
-
-#Transform image tensor into matplotlib-displayable image
-def tensor_to_plt(image):
-    return np.transpose(image.cpu().detach().numpy(), (1,2,0))
+import convert_image
 
 ### Training function
 def train_epoch(encoder, decoder, device, dataloader, loss_fn, optimizer):
@@ -103,7 +100,7 @@ def plot_images(images, reconstructed_images, n):
 
     for i in range(min(len(images), n)):
         ax = plt.subplot(2, n, i + 1)
-        plt.imshow(tensor_to_plt(images[i]), cmap='gray')
+        plt.imshow(convert_image.tensor_to_numpy(images[i]), cmap='gray')
         ax.get_xaxis().set_visible(False)
         ax.get_yaxis().set_visible(False)
 
@@ -111,7 +108,7 @@ def plot_images(images, reconstructed_images, n):
             ax.set_title('Original images')
 
         ax = plt.subplot(2, n, i + 1 + n)
-        plt.imshow(tensor_to_plt(reconstructed_images[i]), cmap='gray')
+        plt.imshow(convert_image.tensor_to_numpy(reconstructed_images[i]), cmap='gray')
         ax.get_xaxis().set_visible(False)
         ax.get_yaxis().set_visible(False)
 
