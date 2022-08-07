@@ -20,7 +20,7 @@ classes = ["Failure", "Success"]
 
 def get_result_from_file_name(file_name):
     #remove file type then get result
-    return file_name.split('.')[0].split('_')[4]
+    return file_name.split('.')[0].split('_')[5]
 
 def arrange_files(config):
     sort_files(config.data_dir, config.sorted_data_dir, config.train_prop, config.val_prop, seed=config.seed)

@@ -34,8 +34,6 @@ if __name__ == '__main__':
     encoded_image_a = encoded_images[random.randint(0, len(encoded_images))]
     encoded_image_b = encoded_images[random.randint(0, len(encoded_images))]
 
-
-
     with torch.no_grad():
         #Generate synethic image
         lerp_quantity = 0.5

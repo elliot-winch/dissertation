@@ -12,6 +12,7 @@ import handle_json
 import handle_image_loading
 from progress_bar import log_progress_bar
 import convert_image
+from arrange_files import get_result_from_file_name
 
 if __name__ == "__main__":
 
@@ -24,7 +25,7 @@ if __name__ == "__main__":
     config = handle_json.json_file_to_obj(args.encoder_path + '/info.json')
 
     #Load images
-    file_paths = handle_image_loading.load_images(args.image_folder, return_full_path=True)
+    file_paths = handle_image_loading.load_images(args.image_folder, return_full_path=True, search_subfolders=True)
 
     #Create Transform
     tfs = []
@@ -64,6 +65,7 @@ if __name__ == "__main__":
 
             entry = SimpleNamespace()
             entry.file_name = file_paths[i]
+            entry.image_class = get_result_from_file_name(file_paths[i])
             #0 index to resqueeze the image
             entry.feature_vector = encoded_data.cpu().detach().numpy().tolist()[0]
             file_contents.encoded_images.append(entry)
