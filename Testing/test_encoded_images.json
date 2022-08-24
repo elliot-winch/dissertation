@@ -1,0 +1,21 @@
+{
+  "encoded_images" :
+   [
+     {
+       "image_class": 0,
+       "feature_vector": [1]
+     },
+     {
+       "image_class": 0,
+       "feature_vector": [2]
+     },
+     {
+       "image_class": 0,
+       "feature_vector": [4]
+     },
+     {
+       "image_class": 0,
+       "feature_vector": [10]
+     }
+   ]
+ }

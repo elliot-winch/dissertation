@@ -19,6 +19,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--image_folder", help="path to dataset")
     parser.add_argument("-e", "--encoder_path", help="path to encoder folder")
+    parser.add_argument("-n", "--file_name", help="optional name of output file")
     args = parser.parse_args()
 
     #Load config
@@ -77,4 +78,6 @@ if __name__ == "__main__":
             file_contents.encoded_images.append(entry)
         log_progress_bar(1)
 
-    handle_json.obj_to_json_file(file_contents, "{}/encoded_images_{}.json".format(args.encoder_path, time.strftime("%m%d_%H%M%S")))
+    file_name = args.file_name if hasattr(args, 'file_name') else 'encoded_images'
+
+    handle_json.obj_to_json_file(file_contents, "{}/{}_{}.json".format(args.encoder_path, file_name, time.strftime("%m%d_%H%M%S")))

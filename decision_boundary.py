@@ -4,6 +4,7 @@ import numpy as np
 from types import SimpleNamespace
 
 import argparse
+import time
 
 import handle_json
 import confusion_matrix
@@ -14,10 +15,9 @@ if __name__ == '__main__':
     parser.add_argument("-i", "--encoder_path", help="path to encoder folder")
     parser.add_argument("-e", "--encoded_images", help="name of the encoded image json file")
     parser.add_argument("-c", "--classification_algorithm", help="name of classification algorithm to use")
-
     args = parser.parse_args()
 
-    file_contents = handle_json.json_file_to_obj(args.encoded_images)
+    file_contents = handle_json.json_file_to_obj(args.encoder_path + '\\' + args.encoded_images)
     encoded_images = file_contents.encoded_images
 
     feature_vectors = [encoded_image.feature_vector for encoded_image in file_contents.encoded_images]
@@ -41,4 +41,6 @@ if __name__ == '__main__':
     output.false_positives = measure_performance.recall(output.confusion_matrix, row=0, _class=1)
     output.true_positives = measure_performance.recall(output.confusion_matrix, row=1, _class=1)
 
-    handle_json.obj_to_json_file(output, args.output_file)
+    output_file_name = args.encoder_path + '\\decision_boundary_{}'.format(time.strftime("%m%d_%H%M%S"))
+
+    handle_json.obj_to_json_file(output, output_file_name)
