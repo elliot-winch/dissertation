@@ -50,7 +50,7 @@ def generate_synthetic(encoded_images, oversampling_factor_by_class, seed = None
 
 
 seed = 1
-oversampling_factor_by_class = [2, 0]
+oversampling_factor_by_class = [9, 0]
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
