@@ -1,12 +1,16 @@
 {
+  "algorithm": "svm",
   "confusion_matrix": [
     [
-      0,
-      0
+      730,
+      5600
     ],
     [
-      10200,
-      7620
+      0,
+      60120
     ]
-  ]
+  ],
+  "accuracy": 0.9157261098570354,
+  "false_positives": 0.8846761453396524,
+  "true_positives": 1.0
 }

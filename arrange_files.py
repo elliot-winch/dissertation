@@ -18,9 +18,19 @@ import handle_json
 uses = ["train", "val", "test"]
 classes = ["Failure", "Success"]
 
+def get_result_index_from_file_name(file_name):
+    class_name = get_result_from_file_name(file_name)
+
+    if class_name in classes:
+        return classes.index(class_name)
+    else:
+        return -1
+
 def get_result_from_file_name(file_name):
-    #remove file type then get result
-    return file_name.split('.')[0].split('_')[5]
+    #Remove any proceeding folder names
+    #Remove file type
+    #Get fourth (class) string
+    return file_name.split('\\')[-1].split('.')[0].split('_')[4]
 
 def arrange_files(config):
     sort_files(config.data_dir, config.sorted_data_dir, config.train_prop, config.val_prop, seed=config.seed)

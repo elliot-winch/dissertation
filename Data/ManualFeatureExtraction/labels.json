@@ -1,0 +1,46 @@
+{
+  "templates": [
+    {
+      "label": "Left",
+      "file_name": "FeatureExtraction/Templates/Left_Template.png"
+    },
+    {
+      "label": "Right",
+      "file_name": "FeatureExtraction/Templates/Right_Template.png"
+    }
+  ],
+  "labels": [
+    {
+      "file_name": "04f2ab4b-ba08-436a-9d39-7598fb72efd6_Female_65_Phakic_Failure.png",
+      "label": "Right"
+    },
+    {
+      "file_name": "2ac65e3c-c84f-7029-db2e-00000b0c33b8_Male_58_Phakic_Failure.png",
+      "label": "Left"
+    },
+    {
+      "file_name": "2b0834c9-3dbc-7ec9-8218-000036410da3_Female_69_Phakic_Failure.png",
+      "label": "Right"
+    },
+    {
+      "file_name": "2f3d65f2-7826-c5a8-8b9c-000013d33233_Male_68_Phakic_Failure.png",
+      "label": "Right"
+    },
+    {
+      "file_name": "4b0feb76-989a-455a-b6a8-daa6d1521737_Female_56_Phakic_Failure.png",
+      "label": "Right"
+    },
+    {
+      "file_name": "6f10de89-d9e7-489f-af53-3c051cfe30ff_Male_68_Phakic_Failure.png",
+      "label": "Left"
+    },
+    {
+      "file_name": "7c82e30a-c83e-05a8-4bb1-0000430dbf28_Female_47_PC-IOL_Failure.png",
+      "label": "Right"
+    },
+    {
+      "file_name": "7c9133b1-3c09-aac9-e201-00006823d1eb_Female_64_PC-IOL_Failure.png",
+      "label": "Right"
+    }
+  ]
+}

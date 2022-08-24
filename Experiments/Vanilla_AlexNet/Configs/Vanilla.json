@@ -1,0 +1,17 @@
+{
+  "name" : "Vanilla",
+  "order" : 1,
+  "seed" : 1,
+  "batch_size" : 64,
+  "learning_rate" : 5e-4,
+  "momentum" : 0.9,
+  "epochs" : 15,
+  "model_name": "alexnet",
+  "use_transfer_learning" : false,
+  "use_pretrained" : false,
+  "loss_function_class_weights" : [1,1],
+
+  "sorted_data_dir" : "sorted_data_85075075",
+  "classes" : [ "Failure", "Success" ],
+  "model_path" : "vanilla.pth"
+}

@@ -9,6 +9,7 @@ import AE_Architecture_2707_NoBlue
 import AE_Architecture_2807_1
 import AE_Architecture_0108_1
 import AE_Architecture_0108_2
+import AE_Architecture_0812_1
 
 architectures = {
     "AE_Architecture_2307_1" : AE_Architecture_2307_1,
@@ -22,4 +23,5 @@ architectures = {
     "AE_Architecture_2807_1" : AE_Architecture_2807_1,
     "AE_Architecture_0108_1" : AE_Architecture_0108_1,
     "AE_Architecture_0108_2" : AE_Architecture_0108_2,
+    "AE_Architecture_0812_1" : AE_Architecture_0812_1,
 }

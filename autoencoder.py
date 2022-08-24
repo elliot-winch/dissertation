@@ -210,8 +210,8 @@ if __name__ == "__main__":
         print("\nTesting...")
         val_loss = test_epoch(encoder, decoder, device, val_loader, loss_fn)
         print('\n Train loss: {} \t Val loss: {}'.format(train_loss, val_loss))
-        train_losses.append(train_loss)
-        val_losses.append(val_loss)
+        train_losses.append(np.float32(train_loss))
+        val_losses.append(np.float(val_loss))
 
     if args.save:
         torch.save(encoder.state_dict(), output_folder_name + '/model_encoder.pth')
