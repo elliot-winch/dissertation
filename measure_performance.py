@@ -1,3 +1,6 @@
+import argparse
+import numpy as np
+
 def accuracy(matrix):
 
     if len(matrix) is not len(matrix[0]):
@@ -12,7 +15,7 @@ def accuracy(matrix):
 
             if i is j:
                 total_correct += matrix[i][j]
-                
+
     return total_correct / float(total)
 
 def error_rate(matrix):
@@ -41,15 +44,18 @@ def precision(matrix, column, _class):
     return total_correct / float(total)
 
 def f1(matrix, _class):
-    prec = precision(matrix, _class)
-    rec = recall(matrix, _class)
+    prec = precision(matrix, _class, _class)
+    rec = recall(matrix, _class, _class)
     return 2 * prec * rec / (prec + rec)
 
 if __name__ == '__main__':
-    matrix = [[1,2],[3,4]]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i", "--input_matrix", help="confusion matrix for which to calculate values")
+    args = parser.parse_args()
 
-    print(accuracy(matrix))
-    print(error_rate(matrix))
-    print(recall(matrix, 1))
-    print(precision(matrix, 1))
-    print(f1(matrix, 1))
+    matrix = np.matrix(args.input_matrix).tolist()
+
+    class_ = 1
+
+    print("\nAccuracy {}\n\nRecall {}\nPrecision {}\nF1 Score: {}\n".format(accuracy(matrix), recall(matrix, 1, 1), precision(matrix, 1, 1), f1(matrix, 1)))
+    print("Recall {}\nFalse Positive Rate {}\n".format(recall(matrix, 1, 1), recall(matrix, 0, 1)))
