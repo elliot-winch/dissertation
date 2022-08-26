@@ -72,16 +72,16 @@ class NeuralNetwork(object):
         #Get image transform
         image_transform = handle_dataloader.default_image_transform(self.architecture_data.image_size)
 
-        class_balance = None
-        if hasattr(self.config, 'class_balance'):
-            class_balance = self.config.class_balance
+        class_rebalance = None
+        if hasattr(self.config, 'class_rebalance'):
+            class_rebalance = self.config.class_rebalance
 
         #Data loaders from config
         train_dataloader = handle_dataloader.create_dataloader(
             path = self.config.sorted_data_dir + '/train',
             image_transform = image_transform,
             batch_size = self.config.batch_size,
-            class_balance = class_balance
+            class_rebalance = class_rebalance
         )
 
         val_dataloader = handle_dataloader.create_dataloader(

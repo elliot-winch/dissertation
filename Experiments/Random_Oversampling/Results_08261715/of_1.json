@@ -1,0 +1,113 @@
+{
+  "config": {
+    "name": "RandomOversampling_1",
+    "order": 0,
+    "seed": 100,
+    "batch_size": 64,
+    "learning_rate": 0.0001,
+    "momentum": 0.9,
+    "epochs": 15,
+    "model_name": "alexnet",
+    "use_transfer_learning": true,
+    "use_pretrained": true,
+    "learning_rate_scheduler": "ExponentialLR",
+    "learning_rate_gamma": 0.8,
+    "loss_function_class_weights": [
+      1,
+      1
+    ],
+    "class_rebalance": [
+      1,
+      1
+    ],
+    "sorted_data_dir": "sorted_data_85075075",
+    "classes": [
+      "Failure",
+      "Success"
+    ],
+    "model_path": "model.pth"
+  },
+  "time": "Fri Aug 26 17:15:21 2022",
+  "epochs": [
+    {
+      "loss": 0.3644575587149416,
+      "validation_loss": 0.2736883517354727,
+      "learning_rate": 8e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 54.456743001937866
+    },
+    {
+      "loss": 0.30084987436787464,
+      "validation_loss": 0.26980696618556976,
+      "learning_rate": 6.400000000000001e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 52.28300595283508
+    },
+    {
+      "loss": 0.3228047408079833,
+      "validation_loss": 0.27356194518506527,
+      "learning_rate": 5.120000000000001e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 52.41194176673889
+    },
+    {
+      "loss": 0.329377122809378,
+      "validation_loss": 0.2703022863715887,
+      "learning_rate": 4.0960000000000014e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 52.40426731109619
+    },
+    {
+      "loss": 0.31922126435831694,
+      "validation_loss": 0.2676794044673443,
+      "learning_rate": 3.2768000000000016e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 52.400548458099365
+    }
+  ]
+}

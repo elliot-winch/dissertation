@@ -1,0 +1,97 @@
+{
+  "config": {
+    "name": "RandomOversampling_1",
+    "order": 0,
+    "seed": 100,
+    "batch_size": 64,
+    "learning_rate": 0.0001,
+    "momentum": 0,
+    "epochs": 15,
+    "model_name": "alexnet",
+    "use_transfer_learning": true,
+    "use_pretrained": true,
+    "learning_rate_scheduler": "ExponentialLR",
+    "learning_rate_gamma": 0.8,
+    "loss_function_class_weights": [
+      1,
+      1
+    ],
+    "class_rebalance": [
+      1,
+      1
+    ],
+    "sorted_data_dir": "sorted_data_85075075",
+    "classes": [
+      "Failure",
+      "Success"
+    ],
+    "model_path": "model.pth"
+  },
+  "time": "Fri Aug 26 17:10:52 2022",
+  "epochs": [
+    {
+      "loss": 0.351379675141881,
+      "validation_loss": 0.2832524999976158,
+      "learning_rate": 8e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 54.46694827079773
+    },
+    {
+      "loss": 0.304438975419891,
+      "validation_loss": 0.2794611342251301,
+      "learning_rate": 6.400000000000001e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 52.391992807388306
+    },
+    {
+      "loss": 0.33059755938776425,
+      "validation_loss": 0.2791936509311199,
+      "learning_rate": 5.120000000000001e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 52.39517879486084
+    },
+    {
+      "loss": 0.33935526850518216,
+      "validation_loss": 0.2780363019555807,
+      "learning_rate": 4.0960000000000014e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 52.2560396194458
+    }
+  ]
+}

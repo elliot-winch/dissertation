@@ -1,0 +1,113 @@
+{
+  "config": {
+    "name": "RandomOversampling_1",
+    "order": 0,
+    "seed": 1,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "momentum": 0.9,
+    "epochs": 15,
+    "model_name": "inception",
+    "use_transfer_learning": true,
+    "use_pretrained": true,
+    "learning_rate_scheduler": "ExponentialLR",
+    "learning_rate_gamma": 0.5,
+    "loss_function_class_weights": [
+      1,
+      1
+    ],
+    "class_rebalance": [
+      1,
+      1
+    ],
+    "sorted_data_dir": "sorted_data_85075075",
+    "classes": [
+      "Failure",
+      "Success"
+    ],
+    "model_path": "model.pth"
+  },
+  "time": "Fri Aug 26 15:44:38 2022",
+  "epochs": [
+    {
+      "loss": 0.5082769894951515,
+      "validation_loss": 0.28519127517938614,
+      "learning_rate": 0.0005,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 124.81039309501648
+    },
+    {
+      "loss": 0.41034026226300874,
+      "validation_loss": 0.27811241149902344,
+      "learning_rate": 0.00025,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 122.5627007484436
+    },
+    {
+      "loss": 0.4469692033998082,
+      "validation_loss": 0.279565941542387,
+      "learning_rate": 0.000125,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 124.75882625579834
+    },
+    {
+      "loss": 0.4287677944711085,
+      "validation_loss": 0.2775411196053028,
+      "learning_rate": 6.25e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 123.26797938346863
+    },
+    {
+      "loss": 0.4378351460347015,
+      "validation_loss": 0.27740527503192425,
+      "learning_rate": 3.125e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 122.6520528793335
+    }
+  ]
+}

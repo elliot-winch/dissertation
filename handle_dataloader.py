@@ -2,6 +2,7 @@ import torch
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader, WeightedRandomSampler
 
+#Gets the number of samples in each class
 def get_class_count(dataset):
     class_count = [0] * len(dataset.class_to_idx)
     for _, _class in dataset:
@@ -16,34 +17,27 @@ def default_image_transform(image_size):
         #transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
 
-def create_dataloader(path, image_transform, batch_size=16, class_balance=None):
+def create_dataloader(path, image_transform, batch_size=16, class_rebalance=None):
 
     dataset = datasets.ImageFolder(path, transform=image_transform)
     generator = torch.Generator()
 
-    if class_balance is not None:
+    if class_rebalance is not None:
+        #Random Oversampling
+        #Number of samples in each class before oversampling
         class_count = get_class_count(dataset)
 
-        #Class with the most examples
-        max_class_count = max(class_count)
-
-        #The number of examples in one class would be multiplied by
-        #its class weight to match the number of examples in the
-        #majority class
-        upsample_factor = [max_class_count / i for i in class_count]
-
-        #Calculate total number of samples
+        #Calculate new number of samples
         num_samples = 0
-        for i in range(0, len(dataset.class_to_idx)):
-            upsample_factor[i] *= class_balance[i]
-            num_samples += int(class_count[i] * upsample_factor[i])
+        for i in range(len(dataset.class_to_idx)):
+            num_samples += int(class_count[i] * class_rebalance[i])
 
         #Assign weight to each example
-        example_weights = [0] * len(dataset)
-        for i in range(0, len(dataset)):
-            example_weights[i] = upsample_factor[dataset[i][1]]
+        sample_weights = [class_rebalance[dataset[i][1]] for i in range(len(dataset))]
 
-        weighted_sampler = WeightedRandomSampler(weights=example_weights, num_samples=num_samples, replacement=True)
+        print(class_rebalance, class_count, num_samples)
+
+        weighted_sampler = WeightedRandomSampler(weights=sample_weights, num_samples=num_samples, replacement=True)
 
         return DataLoader(dataset, batch_size=batch_size, shuffle=False, sampler=weighted_sampler, generator=generator)
     else:
