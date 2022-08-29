@@ -1,0 +1,81 @@
+{
+  "config": {
+    "name": "RandomOversampling_6",
+    "order": 2,
+    "seed": 100,
+    "batch_size": 64,
+    "learning_rate": 0.0005,
+    "momentum": 0,
+    "epochs": 15,
+    "model_name": "inception",
+    "use_transfer_learning": true,
+    "use_pretrained": true,
+    "learning_rate_scheduler": "ExponentialLR",
+    "learning_rate_gamma": 0.8,
+    "loss_function_class_weights": [
+      1,
+      1
+    ],
+    "class_rebalance": [
+      6,
+      1
+    ],
+    "sorted_data_dir": "sorted_data_85075075",
+    "classes": [
+      "Failure",
+      "Success"
+    ],
+    "model_path": "model.pth"
+  },
+  "time": "Sun Aug 28 09:26:26 2022",
+  "epochs": [
+    {
+      "loss": 0.9700332464593829,
+      "validation_loss": 0.5412786900997162,
+      "learning_rate": 0.0004,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          1,
+          461
+        ]
+      ],
+      "time_taken": 220.10377550125122
+    },
+    {
+      "loss": 0.9545249726736185,
+      "validation_loss": 0.5331354513764381,
+      "learning_rate": 0.00032,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 210.84562301635742
+    },
+    {
+      "loss": 0.9493934200568632,
+      "validation_loss": 0.5233185738325119,
+      "learning_rate": 0.00025600000000000004,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          1,
+          461
+        ]
+      ],
+      "time_taken": 210.462256193161
+    }
+  ]
+}
