@@ -10,6 +10,16 @@ import handle_json
 import confusion_matrix
 import measure_performance
 
+def build_classifier(encoded_images, classification_algorithm):
+    feature_vectors = [encoded_image.feature_vector for encoded_image in encoded_images]
+    classes = [encoded_image.image_class for encoded_image in encoded_images]
+
+    if classification_algorithm == "kmeans":
+        classifier = KMeans(n_clusters=2, random_state=0).fit(feature_vectors)
+    elif classification_algorithm == "svm":
+        classifier = svm.SVC().fit(feature_vectors, classes)
+    return classifier
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--encoder_path", help="path to encoder folder")
@@ -21,20 +31,11 @@ if __name__ == '__main__':
     encoded_images = file_contents.encoded_images
 
     feature_vectors = [encoded_image.feature_vector for encoded_image in file_contents.encoded_images]
-    classes = [encoded_image.image_class for encoded_image in file_contents.encoded_images]
 
-    labels = None
+    classifier = build_classifier(encoded_images, args.classification_algorithm)
+    predicted = classifier.predict(feature_vectors)
+
     output = SimpleNamespace()
-
-    if args.classification_algorithm == "kmeans":
-        result = KMeans(n_clusters=2, random_state=0).fit(feature_vectors)
-        predicted = result.labels_
-    elif args.classification_algorithm == "svm":
-        print("Fitting classifier...")
-        classifier = svm.SVC().fit(feature_vectors, classes)
-        print("Classifier fitted. Predicting...")
-        predicted = classifier.predict(feature_vectors)
-
     output.algorithm = args.classification_algorithm
     output.confusion_matrix = confusion_matrix.get_confusion_matrx(classes, predicted, num_classes = file_contents.number_of_classes)
     output.accuracy = measure_performance.accuracy(output.confusion_matrix)

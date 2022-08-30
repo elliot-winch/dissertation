@@ -1,3 +1,4 @@
+import torch
 import numpy as np
 from torchvision import transforms
 import cv2
@@ -11,6 +12,12 @@ def tensor_to_numpy(tensor):
 def numpy_to_tensor(array):
     tf = transforms.ToTensor()
     return tf(array) #np.transpose(array, (2,0,1)))
+
+def decode(feature_vector, decoder):
+    feature_vector = torch.Tensor(feature_vector)
+    feature_vector = torch.unsqueeze(feature_vector, dim=0)
+    decoded_image = decoder(feature_vector)
+    return tensor_to_numpy(decoded_image[0])
 
 #Testing
 if __name__ == "__main__":

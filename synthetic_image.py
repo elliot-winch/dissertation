@@ -12,6 +12,15 @@ from convert_image import tensor_to_numpy
 
 seed = 10
 
+def load_decoder(encoder_path):
+    config = handle_json.json_file_to_obj(encoder_path + '/info.json')
+    architecture = AE_Architectures.architectures[config.architecture_name]
+    decoder = architecture.Decoder(config.image_size)
+    model = torch.load(encoder_path + '/model_decoder.pth')
+    decoder.load_state_dict(model)
+    decoder.eval()
+    return decoder
+
 #Testing
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -21,13 +30,7 @@ if __name__ == '__main__':
 
     encoded_images = handle_json.json_file_to_obj(args.encoder_path + '/' + args.encoded_images).encoded_images
 
-    #Load decoder
-    config = handle_json.json_file_to_obj(args.encoder_path + '/info.json')
-    architecture = AE_Architectures.architectures[config.architecture_name]
-    decoder = architecture.Decoder(config.image_size)
-    model = torch.load(args.encoder_path + '/model_decoder.pth')
-    decoder.load_state_dict(model)
-    decoder.eval()
+    decoder = load_decoder(args.encoder_path)
 
     #Choose two random images from all encoded images to test
     random.seed(seed)
@@ -50,6 +53,7 @@ if __name__ == '__main__':
         image_b = cv2.cvtColor(image_b, cv2.COLOR_BGR2RGB)
 
         #Decode sample images
+        #TODO: replace with convert_image.decode
         feature_vector_a = torch.Tensor(encoded_image_a.feature_vector)
         feature_vector_a = torch.unsqueeze(feature_vector_a, dim=0)
         decoded_image_a = decoder(feature_vector_a)

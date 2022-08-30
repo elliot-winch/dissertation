@@ -1,5 +1,4 @@
 import random
-from sklearn.neighbors import NearestNeighbors
 
 from types import SimpleNamespace
 import argparse
@@ -9,11 +8,8 @@ import AE_Architectures
 from lerp import lerp_vector
 import handle_json
 from convert_image import tensor_to_numpy
+from nearest_neighbours import get_nearest_neighbours
 
-def get_nearest_neighbours(feature_vectors, nearest_neighbours_count):
-    nn = NearestNeighbors(n_neighbors=nearest_neighbours_count, algorithm='ball_tree').fit(feature_vectors)
-    _, nearest_neighbours = nn.kneighbors(feature_vectors)
-    return nearest_neighbours
 
 def generate_synthetic_for_class(feature_vectors, nearest_neighbours, class_index):
     synthetic_vectors = []
