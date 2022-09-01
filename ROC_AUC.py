@@ -21,7 +21,7 @@ def roc(results):
         false_positives.append(measure_performance.recall(results[i].confusion_matrix, row=0, _class=1))
         true_positives.append(measure_performance.recall(results[i].confusion_matrix, row=1, _class=1))
 
-    return false_positives, true_positives, result_names
+    return false_positives, true_positives
 
 #Assuming ascending ordered by false_positives
 #Else overlapping areas might be counted
@@ -41,7 +41,7 @@ def auc(false_positives, true_positives):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--folder_name", help="path to results files")
+    parser.add_argument("-i", "--folder_name", help="path to results files")
     args = parser.parse_args()
 
     order_by = lambda results : [measure_performance.recall(result.confusion_matrix, row=0, _class=1) for result in results]
@@ -56,6 +56,8 @@ if __name__ == '__main__':
     for i in range(0, len(file_names)):
         plt.annotate(file_names[i], [fps[i], tps[i]])
 
+    plt.xlabel("False Positive Rate")
+    plt.ylabel("True Positive Rate")
     plt.plot([0, 1], [0, 1], '--')
     plt.xlim([0, 1])
     plt.ylim([0, 1])

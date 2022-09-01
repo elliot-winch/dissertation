@@ -1,6 +1,6 @@
 {
-  "name" : "Weighted_Loss_Function_9",
-  "order" : 10,
+  "name" : "Weighted_Loss_Function_6",
+  "order" : 2,
   "seed" : 100,
   "batch_size" : 64,
   "learning_rate" : 5e-4,
@@ -11,7 +11,7 @@
   "use_pretrained" : true,
   "learning_rate_scheduler" : "ExponentialLR",
   "learning_rate_gamma" : 0.8,
-  "loss_function_class_weights" : [9, 1],
+  "loss_function_class_weights" : [6, 1],
 
   "sorted_data_dir" : "sorted_data_85075075",
   "classes" : [ "Failure", "Success" ],

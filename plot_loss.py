@@ -65,7 +65,7 @@ class PlotLoss(object):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--folder_name", help="path to results files")
+    parser.add_argument("-i", "--folder_name", help="path to results files")
     args = parser.parse_args()
 
     order_by = lambda results : [result.config.order for result in results]

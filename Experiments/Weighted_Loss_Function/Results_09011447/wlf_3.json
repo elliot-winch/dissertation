@@ -1,0 +1,279 @@
+{
+  "config": {
+    "name": "Weighted_Loss_Function_3",
+    "order": 1,
+    "seed": 100,
+    "batch_size": 64,
+    "learning_rate": 0.0005,
+    "momentum": 0,
+    "epochs": 15,
+    "model_name": "inception",
+    "use_transfer_learning": true,
+    "use_pretrained": true,
+    "learning_rate_scheduler": "ExponentialLR",
+    "learning_rate_gamma": 0.8,
+    "loss_function_class_weights": [
+      3,
+      1
+    ],
+    "sorted_data_dir": "sorted_data_85075075",
+    "classes": [
+      "Failure",
+      "Success"
+    ],
+    "model_path": "model.pth"
+  },
+  "time": "Thu Sep  1 14:47:47 2022",
+  "epochs": [
+    {
+      "loss": 0.8320626361986224,
+      "validation_loss": 0.5205503441393375,
+      "learning_rate": 0.0004,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 144.51346135139465
+    },
+    {
+      "loss": 0.7834713592957915,
+      "validation_loss": 0.5212776362895966,
+      "learning_rate": 0.00032,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 122.97576022148132
+    },
+    {
+      "loss": 0.7872401415632012,
+      "validation_loss": 0.511312797665596,
+      "learning_rate": 0.00025600000000000004,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 125.08588290214539
+    },
+    {
+      "loss": 0.7865737418780167,
+      "validation_loss": 0.5189038179814816,
+      "learning_rate": 0.00020480000000000004,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 125.42816305160522
+    },
+    {
+      "loss": 0.7853686253676254,
+      "validation_loss": 0.5140299797058105,
+      "learning_rate": 0.00016384000000000006,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 123.44094729423523
+    },
+    {
+      "loss": 0.7835032102767001,
+      "validation_loss": 0.5108017548918724,
+      "learning_rate": 0.00013107200000000006,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 124.72879672050476
+    },
+    {
+      "loss": 0.782535354073128,
+      "validation_loss": 0.5147734954953194,
+      "learning_rate": 0.00010485760000000006,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 125.288649559021
+    },
+    {
+      "loss": 0.7753096919381217,
+      "validation_loss": 0.5108929872512817,
+      "learning_rate": 8.388608000000005e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 130.1088638305664
+    },
+    {
+      "loss": 0.7784338205048208,
+      "validation_loss": 0.5125415250658989,
+      "learning_rate": 6.710886400000004e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 129.05533981323242
+    },
+    {
+      "loss": 0.7808937252907271,
+      "validation_loss": 0.5124859400093555,
+      "learning_rate": 5.3687091200000036e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 123.26464486122131
+    },
+    {
+      "loss": 0.7855209051892998,
+      "validation_loss": 0.5036753416061401,
+      "learning_rate": 4.2949672960000034e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 133.47641324996948
+    },
+    {
+      "loss": 0.7793149131067684,
+      "validation_loss": 0.5030950792133808,
+      "learning_rate": 3.435973836800003e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 134.62536239624023
+    },
+    {
+      "loss": 0.7791574657633064,
+      "validation_loss": 0.5085514262318611,
+      "learning_rate": 2.7487790694400027e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 129.61920380592346
+    },
+    {
+      "loss": 0.7869704446096099,
+      "validation_loss": 0.506141908466816,
+      "learning_rate": 2.1990232555520022e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 139.57778072357178
+    },
+    {
+      "loss": 0.7771145540676759,
+      "validation_loss": 0.5087834447622299,
+      "learning_rate": 1.7592186044416018e-05,
+      "confusion_matrix": [
+        [
+          0,
+          41
+        ],
+        [
+          0,
+          462
+        ]
+      ],
+      "time_taken": 122.90261721611023
+    }
+  ],
+  "confusion_matrix": [
+    [
+      0,
+      43
+    ],
+    [
+      0,
+      439
+    ]
+  ]
+}

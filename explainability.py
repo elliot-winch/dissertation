@@ -45,6 +45,7 @@ def counterfactual_image(start, target, classifier, iterations = 8):
     return counterfactual
 
 class_to_examine = 0
+skip = 1
 num_to_produce = 5
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -67,8 +68,11 @@ if __name__ == '__main__':
     #Fine the first correctly classified example for a class
     for i in range(len(encoded_images)):
         if predicted[i] == class_to_examine and encoded_images[i].image_class == class_to_examine:
-            selected_image = encoded_images[i]
-            break
+            if skip <= 0:
+                selected_image = encoded_images[i]
+                break
+            else:
+                skip -= 1
 
     if selected_image == None:
         print("Failed to find any correctly classified examples of the class {}".format(class_to_examine))

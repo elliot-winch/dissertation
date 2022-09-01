@@ -50,7 +50,7 @@ def f1(matrix, _class):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--input_matrix", help="confusion matrix for which to calculate values")
+    parser.add_argument("-i", "--input_matrix", help="confusion matrix in format \"TN FN; FP TP\"")
     args = parser.parse_args()
 
     matrix = np.matrix(args.input_matrix).tolist()
